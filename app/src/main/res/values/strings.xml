@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ClubLife</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">685023911628023</string>
+    <string name="baseURL">http://www.prn.t15.org/clublife/</string>
+    <string name="title_activity_event_list_people">EventListPeople</string>
+    <string name="title_activity_owner_event_list">MyEvents</string>
+    <string name="title_activity_add_event">Add Event</string>
+</resources>
