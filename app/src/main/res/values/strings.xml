@@ -8,4 +8,5 @@
     <string name="title_activity_event_list_people">EventListPeople</string>
     <string name="title_activity_owner_event_list">MyEvents</string>
     <string name="title_activity_add_event">Add Event</string>
+    <string name="title_activity_people_event_list">PeopleEventList</string>
 </resources>

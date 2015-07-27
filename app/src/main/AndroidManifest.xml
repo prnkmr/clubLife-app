@@ -43,6 +43,10 @@
             android:name=".addEvent"
             android:label="@string/title_activity_add_event" >
         </activity>
+        <activity
+            android:name=".PeopleEventList"
+            android:label="@string/title_activity_people_event_list" >
+        </activity>
     </application>
 
 </manifest>

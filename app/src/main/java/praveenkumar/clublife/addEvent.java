@@ -1,8 +1,9 @@
 package praveenkumar.clublife;
 
-import android.support.v4.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +27,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
     EditText eventNameText,ticketCountText;
     String date,time;
     String baseURL;
+    SharedPreferences sharedPreference;
 
 
     private boolean dateSet=false,timeSet=false;
@@ -34,6 +38,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
         baseURL=getString(R.string.baseURL);
         eventNameText=(EditText)findViewById(R.id.eventName);
         ticketCountText=(EditText)findViewById(R.id.ticketCount);
+        sharedPreference=getSharedPreferences("clublife", MODE_PRIVATE);
 
     }
 
@@ -89,6 +94,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
     public void addNewEvent(View v){
         String eventName=eventNameText.getText().toString();
         String ticketCount=ticketCountText.getText().toString();
+        String userId=sharedPreference.getInt("userId",0)+"";
         if("".equals(eventName)){
             myToast("Give an Event Name");
             return;
@@ -108,6 +114,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
 
         String url=baseURL+"addEvent.php";
         List<NameValuePair> json=new ArrayList<>();
+        json.add(new BasicNameValuePair("userId",userId));
         json.add(new BasicNameValuePair("eventName",eventName));
         json.add(new BasicNameValuePair("dateTime",date+" "+time));
         json.add(new BasicNameValuePair("ticketCount",ticketCount));
@@ -118,12 +125,26 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
     }
 
     void myToast(String msg){
-        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void onResponse(String response) {
-         
+        if(response==null){
+            return;
+        }
+        Log.d("Response", response);
+        try {
+            JSONObject respJson=new JSONObject(response);
+            if(respJson.getInt("errorCode")==0){
+                finish();
+            }else{
+                myToast("Server Error");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }

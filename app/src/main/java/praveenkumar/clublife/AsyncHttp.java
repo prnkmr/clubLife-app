@@ -24,7 +24,7 @@ public class AsyncHttp extends AsyncTask{
     HttpPost post;
     List jsonObject;
     HttpClient client;
-    String resp=new String();
+    String resp=null;
     public AsyncHttpListener caller;
     AsyncHttp( String url, List jsonObject,AsyncHttpListener caller) {
         this.caller=caller;
@@ -32,11 +32,11 @@ public class AsyncHttp extends AsyncTask{
         this.jsonObject=jsonObject;
 // Set the timeout in milliseconds until a connection is established.
 // The default value is zero, that means the timeout is not used.
-        int timeoutConnection = 3000;
+        int timeoutConnection = 10000;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
 // Set the default socket timeout (SO_TIMEOUT)
 // in milliseconds which is the timeout for waiting for data.
-        int timeoutSocket = 5000;
+        int timeoutSocket = 10000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
 
@@ -68,6 +68,7 @@ public class AsyncHttp extends AsyncTask{
 
     @Override
     protected void onPostExecute(Object o) {
+
         caller.onResponse(resp);
     }
 }

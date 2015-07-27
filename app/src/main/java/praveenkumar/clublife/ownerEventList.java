@@ -41,17 +41,20 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
             }
         });
 
+        updateList();
 
+
+
+    }
+
+    void updateList(){
         listview = (ListView) findViewById(R.id.events);
         String url=baseURL+"retrieveEvents.php";
         List<NameValuePair> json=new ArrayList<>();
         int id=getSharedPreferences("clublife", Context.MODE_PRIVATE).getInt("userId",0);
         json.add(new BasicNameValuePair("userId",id+""));
         new AsyncHttp(url,json,this).execute();
-
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -117,6 +120,12 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     }
 
     void myToast(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT);
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
     }
 }
