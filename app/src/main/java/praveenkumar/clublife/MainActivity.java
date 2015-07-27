@@ -166,17 +166,13 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                 int id;
                 if("people".equals(json.getString("userType"))) {
                     id = json.getInt("userId");
-
                     //startActivity(new Intent(getApplicationContext(),));
                 }else{
                     id=json.getInt("userId");
                     String hotelName=json.getString("hotelName");
                     String address=json.getString("address");
-
                     startActivity(new Intent(getApplicationContext(),ownerEventList.class));
-
                 }
-
                 SharedPreferences pref = getSharedPreferences("clublife", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putInt("userId", id);
