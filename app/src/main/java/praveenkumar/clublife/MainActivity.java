@@ -39,15 +39,25 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
     CallbackManager callbackManager;
     FacebookSdk facebook;
     String baseURL="";
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        pref = getSharedPreferences("clublife", Context.MODE_PRIVATE);
+        editor = pref.edit();
+
         facebook=new FacebookSdk();
         facebook.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
         baseURL=getString(R.string.baseURL);
+        if(AccessToken.getCurrentAccessToken()!=null)
+        {
+            LoginManager.getInstance().logOut();
+        }
         Button loginButton=(Button)findViewById(R.id.login);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +70,9 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-
                         myLog("Login success");
 
-                        AccessToken accessToken = loginResult.getAccessToken();
+                        final AccessToken accessToken = loginResult.getAccessToken();
                         Log.d("UserId", accessToken.getUserId());
                         GraphRequest request = GraphRequest.newMeRequest(
                                 accessToken,
@@ -74,7 +83,10 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                                             GraphResponse response) {
                                         Log.d("user Json", object.toString());
                                         try {
-                                            myToast("welcome " + object.getString("name"));
+                                            editor.putString("userName",object.getString("name"));
+                                            editor.putString("userId",accessToken.getUserId());
+                                            editor.commit();
+                                            onLogin();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -86,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                         parameters.putString("fields", "id,name,link,birthday,gender,location,verified");
                         request.setParameters(parameters);
                         request.executeAsync();
+
 
                     }
 
@@ -101,6 +114,13 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                 });
 
 
+
+    }
+
+    private void onLogin() {
+        myToast("welcome " + pref.getString("userName",""));
+        startActivity(new Intent(getBaseContext(),PeopleEventList.class));
+        finish();
     }
 
     @Override
@@ -159,7 +179,10 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
 
     @Override
     public void onResponse(String response) {
-        Log.d("Response",response);
+        if(response==null){
+            myToast("Try Again");
+            return;
+        }
         try {
             JSONObject json=new JSONObject(response);
             if(json.getInt("errorCode")==0){
@@ -172,14 +195,17 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                     String hotelName=json.getString("hotelName");
                     String address=json.getString("address");
                     startActivity(new Intent(getApplicationContext(),ownerEventList.class));
+                    finish();
                 }
-                SharedPreferences pref = getSharedPreferences("clublife", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putInt("userId", id);
+
+                editor.putString("userId", id+"");
                 editor.commit();
+            }else if(json.getInt("errorCode")==5) {
+                myToast("Wrong Username/Password");
             }else{
-                myToast("Server error");
-            }
+                    myToast("Server error");
+                }
+
         } catch (JSONException e) {
 
             myToast("Cannot Connect to Server");
@@ -198,7 +224,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        new AsyncHttp(url,json,this).execute();
+        new AsyncHttp(url,json,this);
     }
     void validateOwnerLogin(){
         String username=((EditText)findViewById(R.id.username)).getText().toString();
@@ -208,6 +234,6 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
         List<NameValuePair> json= new ArrayList<NameValuePair>();
         json.add(new BasicNameValuePair("username",username));
         json.add(new BasicNameValuePair("password",password));
-        new AsyncHttp(url,json,this).execute();
+        new AsyncHttp(url,json,this);
     }
 }

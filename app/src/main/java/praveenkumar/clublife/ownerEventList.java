@@ -27,7 +27,7 @@ import java.util.List;
 public class ownerEventList extends ActionBarActivity implements AsyncHttpListener, AdapterView.OnItemClickListener {
     String baseURL="";
     ListView listview;
-    List<Integer> idReference;
+    List<String> idReference,list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
             }
         });
 
-        updateList();
+        //updateList();
 
 
 
@@ -49,11 +49,11 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
     void updateList(){
         listview = (ListView) findViewById(R.id.events);
-        String url=baseURL+"retrieveEvents.php";
+        String url=baseURL+"getOwnerEvents.php";
         List<NameValuePair> json=new ArrayList<>();
-        int id=getSharedPreferences("clublife", Context.MODE_PRIVATE).getInt("userId",0);
-        json.add(new BasicNameValuePair("userId",id+""));
-        new AsyncHttp(url,json,this).execute();
+        String id=getSharedPreferences("clublife", Context.MODE_PRIVATE).getString("userId","");
+        json.add(new BasicNameValuePair("userId",id));
+        new AsyncHttp(url,json,this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,18 +79,22 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
     @Override
     public void onResponse(String response) {
-        Log.d("Response",response);
+        if(response==null){
+            myToast("Try Again");
+            return;
+        }
 
-        ArrayList<String> list = new ArrayList<String>();
-        idReference=new ArrayList<Integer>();
+        list = new ArrayList<String>();
+        idReference=new ArrayList<String>();
         try {
             JSONObject json=new JSONObject(response);
             if(json.getInt("errorCode")==0){
             JSONArray events=json.getJSONArray("list");
             for (int i = 0; i < events.length(); ++i) {
-                JSONObject event=(JSONObject)events.get(i);
-                list.add(event.getString("eventName"));
-                idReference.add(event.getInt("eventId"));
+                JSONArray event=(JSONArray)events.get(i);
+
+                idReference.add(event.getString(0));
+                list.add(event.getString(1));
             }
                 final ArrayAdapter adapter = new ArrayAdapter(this,
                         android.R.layout.simple_list_item_1, list);
@@ -110,9 +114,10 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        Log.d("position", position + "");
-        Log.d("id",id+"");
+        Intent registeredUsersIntent = new Intent(this,PeopleRegisteredToEvent.class);
+        registeredUsersIntent.putExtra("eventId",idReference.get(position));
+        registeredUsersIntent.putExtra("eventName",list.get(position));
+        startActivity(registeredUsersIntent);
     }
 
     void addEvent(){

@@ -47,6 +47,18 @@
             android:name=".PeopleEventList"
             android:label="@string/title_activity_people_event_list" >
         </activity>
+        <activity
+            android:name=".PeopleEventDetails"
+            android:label="@string/title_activity_people_event_details" >
+        </activity>
+        <activity
+            android:name=".PeopleRegisteredToEvent"
+            android:label="@string/title_activity_people_registered_to_event" >
+        </activity>
+        <activity
+            android:name=".PeopleDetails"
+            android:label="@string/title_activity_people_details" >
+        </activity>
     </application>
 
 </manifest>

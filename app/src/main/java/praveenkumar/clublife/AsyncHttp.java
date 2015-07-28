@@ -1,6 +1,7 @@
 package praveenkumar.clublife;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -43,7 +44,7 @@ public class AsyncHttp extends AsyncTask{
         client=new DefaultHttpClient(httpParameters);
         post=new HttpPost(url);
         System.out.println("Constructor done");
-
+        execute();
     }
     @Override
     protected Object doInBackground(Object[] params) {
@@ -54,7 +55,7 @@ public class AsyncHttp extends AsyncTask{
             HttpResponse response = client.execute(post);
 
             resp= EntityUtils.toString(response.getEntity());
-          //  System.out.println(resp);
+            Log.d("http Response:",resp);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

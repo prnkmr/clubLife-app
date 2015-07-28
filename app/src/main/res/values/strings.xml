@@ -9,4 +9,7 @@
     <string name="title_activity_owner_event_list">MyEvents</string>
     <string name="title_activity_add_event">Add Event</string>
     <string name="title_activity_people_event_list">PeopleEventList</string>
+    <string name="title_activity_people_event_details">PeopleEventDetails</string>
+    <string name="title_activity_people_registered_to_event">PeopleRegisteredToEvent</string>
+    <string name="title_activity_people_details">PeopleDetails</string>
 </resources>

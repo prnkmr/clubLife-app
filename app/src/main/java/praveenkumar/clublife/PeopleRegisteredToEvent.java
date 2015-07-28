@@ -1,6 +1,5 @@
 package praveenkumar.clublife;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -23,31 +23,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PeopleEventList extends ActionBarActivity implements AsyncHttpListener, AdapterView.OnItemClickListener {
+public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncHttpListener,  AdapterView.OnItemClickListener {
+    ListView listView;
+    TextView titleText;
+    String baseURL,eventId,eventName,userId;
+    List<String> usersList,idReference;
 
-    ListView listview;
-    String baseURL;
-    List<String> idReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_people_event_list);
         baseURL=getString(R.string.baseURL);
-        updateList();
-    }
-
-    private void updateList() {
-        listview = (ListView) findViewById(R.id.allEvents);
-        String url=baseURL+"getPeopleEvents.php";
-        Log.d("URL",url);
+        userId=getIntent().getStringExtra("userId");
+        setContentView(R.layout.activity_people_registered_to_event);
+        listView=(ListView)findViewById(R.id.registeredUsers);
+        titleText=(TextView)findViewById(R.id.eventTitle);
+        eventId=getIntent().getExtras().getString("eventId");
+        eventName=getIntent().getExtras().getString("eventName");
+        titleText.setText(eventName);
+        String url=baseURL+"getRegisteredUsers.php";
         List<NameValuePair> json=new ArrayList<>();
+        json.add(new BasicNameValuePair("eventId",eventId));
         new AsyncHttp(url,json,this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_people_event_list, menu);
+        getMenuInflater().inflate(R.menu.menu_people_registered_to_event, menu);
         return true;
     }
 
@@ -72,41 +74,37 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
             myToast("Try Again");
             return;
         }
-
-
-        ArrayList<String> list = new ArrayList<String>();
-        idReference=new ArrayList<String>();
         try {
-            JSONObject json=new JSONObject(response);
-            if(json.getInt("errorCode")==0){
-                JSONArray events=json.getJSONArray("list");
-                for (int i = 0; i < events.length(); ++i) {
-                    JSONArray event=(JSONArray)events.get(i);
-                    list.add((String)event.get(1));
-                    idReference.add((String)event.get(0));
+            JSONObject respJson=new JSONObject(response);
+            if(respJson.getInt("errorCode")==0){
+                usersList=new ArrayList<>();
+                idReference=new ArrayList<>();
+                JSONArray usersJson=respJson.getJSONArray("list");
+                for (int i = 0; i < usersJson.length(); i++) {
+                    JSONArray userJson=usersJson.getJSONArray(i);
+                    usersList.add(userJson.getString(0));
+                    idReference.add(userJson.getString(1));
                 }
-                final ArrayAdapter adapter = new ArrayAdapter(this,
-                        android.R.layout.simple_list_item_1, list);
-                listview.setAdapter(adapter);
-                listview.setOnItemClickListener(this);
-            }
-            else{
+                ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,usersList);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(this);
+            }else{
                 myToast("Server Error");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void myToast(String s) {
-        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent detailsIntent=new Intent(this,PeopleEventDetails.class);
-        detailsIntent.putExtra("eventId",idReference.get(position));
-        startActivity(detailsIntent);
+        Log.d("Clicked", position + "");
+        Intent userDetailsIntent=new Intent(this,PeopleDetails.class);
+        userDetailsIntent.putExtra("userId",idReference.get(position));
+        startActivity(userDetailsIntent);
     }
 }
