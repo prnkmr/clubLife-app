@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +25,14 @@ import java.util.List;
 
 
 public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpListener {
-    TextView eventTitleText,dateText,timeText,locationText;
+    TextView eventTitleText,dateText,timeText,locationText,addressText,ticketCountText;
     String baseURL,eventId;
     SharedPreferences preferences;
+    SpinnerDialogue spinnerDialogue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences=getSharedPreferences("clublife",MODE_PRIVATE);
+        preferences=getSharedPreferences("clublife", MODE_PRIVATE);
         eventId=getIntent().getExtras().getString("eventId");
         setContentView(R.layout.activity_people_event_details);
         baseURL=getString(R.string.baseURL);
@@ -38,7 +40,10 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
         dateText=(TextView)findViewById(R.id.date);
         timeText=(TextView)findViewById(R.id.time);
         locationText=(TextView)findViewById(R.id.location);
+        addressText=(TextView)findViewById(R.id.address);
+        ticketCountText=(TextView)findViewById(R.id.ticketCount);
         updateData();
+
     }
 
     private void updateData() {
@@ -46,6 +51,7 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
         List<NameValuePair> json=new ArrayList<>();
         json.add(new BasicNameValuePair("eventId",eventId));
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Loading Event Details...");
 
     }
 
@@ -73,6 +79,7 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
 
     @Override
     public void onResponse(String response) {
+        spinnerDialogue.cancel();
             if(response==null){
                 myToast("Try Again");
                 return;
@@ -93,15 +100,15 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 locationText.setText(respJson.getString("hotelName"));
+                addressText.setText(respJson.getString("address"));
+                ticketCountText.setText(respJson.getString("ticketCount"));
             }else{
                 myToast("Server Error");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void myToast(String s) {
@@ -117,15 +124,23 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
         json.add(new BasicNameValuePair("userId",userId));
         json.add(new BasicNameValuePair("userName",userName));
         json.add(new BasicNameValuePair("eventId",eventId));
-
+        spinnerDialogue=new SpinnerDialogue(this,"Registering...");
         new AsyncHttp(url, json, new AsyncHttpListener() {
             @Override
             public void onResponse(String response) {
+                spinnerDialogue.cancel();
+                if(response==null){
+                    myToast("Try Again");
+                    return;
+                }
                 try {
                     JSONObject respJson=new JSONObject(response);
                     if(respJson.getInt("errorCode")==0) {
                         myToast("Registration Success");
                         finish();
+                    }else if(respJson.getInt("errorCode")==6){
+                        myToast("Ticket not Available");
+                        updateData();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

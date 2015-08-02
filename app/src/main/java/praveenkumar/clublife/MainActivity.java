@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
     String baseURL="";
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SpinnerDialogue spinnerDialogue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,9 +85,9 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                                         Log.d("user Json", object.toString());
                                         try {
                                             editor.putString("userName",object.getString("name"));
-                                            editor.putString("userId",accessToken.getUserId());
+                                            editor.putString("userId", accessToken.getUserId());
                                             editor.commit();
-                                            onLogin();
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -118,6 +119,10 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
     }
 
     private void onLogin() {
+        if(spinnerDialogue!=null) {
+            spinnerDialogue.cancel();
+            spinnerDialogue = null;
+        }
         myToast("welcome " + pref.getString("userName",""));
         startActivity(new Intent(getBaseContext(),PeopleEventList.class));
         finish();
@@ -179,6 +184,10 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
 
     @Override
     public void onResponse(String response) {
+        if(spinnerDialogue!=null) {
+            spinnerDialogue.cancel();
+            spinnerDialogue = null;
+        }
         if(response==null){
             myToast("Try Again");
             return;
@@ -189,6 +198,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                 int id;
                 if("people".equals(json.getString("userType"))) {
                     id = json.getInt("userId");
+                    onLogin();
                     //startActivity(new Intent(getApplicationContext(),));
                 }else{
                     id=json.getInt("userId");
@@ -225,6 +235,8 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             e.printStackTrace();
         }
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Logging In...");
+
     }
     void validateOwnerLogin(){
         String username=((EditText)findViewById(R.id.username)).getText().toString();
@@ -234,6 +246,9 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
         List<NameValuePair> json= new ArrayList<NameValuePair>();
         json.add(new BasicNameValuePair("username",username));
         json.add(new BasicNameValuePair("password",password));
+
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Verifiying...");
     }
+
 }

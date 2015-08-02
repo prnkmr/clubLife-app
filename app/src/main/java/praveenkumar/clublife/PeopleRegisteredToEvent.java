@@ -27,7 +27,8 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
     ListView listView;
     TextView titleText;
     String baseURL,eventId,eventName,userId;
-    List<String> usersList,idReference;
+    List<String> usersList,idReference,ticketIdReference;
+    SpinnerDialogue spinnerDialogue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,15 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
         eventId=getIntent().getExtras().getString("eventId");
         eventName=getIntent().getExtras().getString("eventName");
         titleText.setText(eventName);
+
+    }
+
+    void updateList(){
         String url=baseURL+"getRegisteredUsers.php";
         List<NameValuePair> json=new ArrayList<>();
         json.add(new BasicNameValuePair("eventId",eventId));
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Loding User List...");
     }
 
     @Override
@@ -59,17 +65,16 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onResponse(String response) {
+        spinnerDialogue.cancel();
         if(response==null){
             myToast("Try Again");
             return;
@@ -79,11 +84,13 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
             if(respJson.getInt("errorCode")==0){
                 usersList=new ArrayList<>();
                 idReference=new ArrayList<>();
+                ticketIdReference=new ArrayList<>();
                 JSONArray usersJson=respJson.getJSONArray("list");
                 for (int i = 0; i < usersJson.length(); i++) {
                     JSONArray userJson=usersJson.getJSONArray(i);
                     usersList.add(userJson.getString(0));
                     idReference.add(userJson.getString(1));
+                    ticketIdReference.add(userJson.getString(2));
                 }
                 ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,usersList);
                 listView.setAdapter(adapter);
@@ -105,6 +112,13 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
         Log.d("Clicked", position + "");
         Intent userDetailsIntent=new Intent(this,PeopleDetails.class);
         userDetailsIntent.putExtra("userId",idReference.get(position));
+        userDetailsIntent.putExtra("ticketId",ticketIdReference.get(position));
         startActivity(userDetailsIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
     }
 }

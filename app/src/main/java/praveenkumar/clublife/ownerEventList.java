@@ -28,6 +28,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     String baseURL="";
     ListView listview;
     List<String> idReference,list;
+    SpinnerDialogue spinnerDialogue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
         List<NameValuePair> json=new ArrayList<>();
         String id=getSharedPreferences("clublife", Context.MODE_PRIVATE).getString("userId","");
         json.add(new BasicNameValuePair("userId",id));
+        spinnerDialogue=new SpinnerDialogue(this,"Loading Events...");
         new AsyncHttp(url,json,this);
     }
     @Override
@@ -79,6 +81,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
     @Override
     public void onResponse(String response) {
+        spinnerDialogue.cancel();
         if(response==null){
             myToast("Try Again");
             return;

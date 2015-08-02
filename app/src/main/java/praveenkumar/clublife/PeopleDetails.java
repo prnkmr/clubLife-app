@@ -23,6 +23,7 @@ import java.util.List;
 public class PeopleDetails extends ActionBarActivity implements AsyncHttpListener {
     TextView peopleNameText,FBLinkText;
     String baseURL,userId;
+    SpinnerDialogue spinnerDialogue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
         ArrayList json=new ArrayList();
         json.add(new BasicNameValuePair("userId",userId));
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Loading User Details...");
     }
 
     @Override
@@ -63,6 +65,7 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
 
     @Override
     public void onResponse(String response) {
+        spinnerDialogue.cancel();
         if(response==null){
             myToast("Try Again");
             return;
@@ -91,5 +94,57 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
 
     private void myToast(String s) {
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+    }
+
+    public void confirmTicket(View view){
+        String url=baseURL+"confirmTicket.php";
+        ArrayList param=new ArrayList();
+        param.add(new BasicNameValuePair("ticketId",getIntent().getStringExtra("ticketId")));
+        new AsyncHttp(url, param, new AsyncHttpListener() {
+            @Override
+            public void onResponse(String response) {
+                spinnerDialogue.cancel();
+                if(response==null){
+                    myToast("Try Again");
+                    return;
+                }
+                try {
+                    JSONObject resp=new JSONObject(response);
+                    if(resp.getInt("errorCode")==0){
+                        myToast("Ticket Confirmed");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        spinnerDialogue=new SpinnerDialogue(this,"Please wait...");
+    }
+
+    public void cancelTicket(View view){
+        String url=baseURL+"cancelTicket.php";
+        ArrayList param=new ArrayList();
+        param.add(new BasicNameValuePair("ticketId",getIntent().getStringExtra("ticketId")));
+        new AsyncHttp(url, param, new AsyncHttpListener() {
+            @Override
+            public void onResponse(String response) {
+                spinnerDialogue.cancel();
+                if(response==null){
+                    myToast("Try Again");
+                    return;
+                }
+                try {
+                    JSONObject resp=new JSONObject(response);
+                    if(resp.getInt("errorCode")==0){
+                        myToast("Ticket Cancelled");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        spinnerDialogue=new SpinnerDialogue(this,"Please wait...");
     }
 }

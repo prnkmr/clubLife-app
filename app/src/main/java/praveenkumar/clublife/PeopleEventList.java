@@ -28,6 +28,7 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     ListView listview;
     String baseURL;
     List<String> idReference;
+    SpinnerDialogue spinnerDialogue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,7 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
         Log.d("URL",url);
         List<NameValuePair> json=new ArrayList<>();
         new AsyncHttp(url,json,this);
+        spinnerDialogue=new SpinnerDialogue(this,"Loading Events...");
     }
 
     @Override
@@ -68,6 +70,7 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
 
     @Override
     public void onResponse(String response) {
+        spinnerDialogue.cancel();
         if(response==null){
             myToast("Try Again");
             return;
