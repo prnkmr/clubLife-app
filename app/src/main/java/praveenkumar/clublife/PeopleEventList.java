@@ -2,6 +2,7 @@ package praveenkumar.clublife;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -29,18 +31,25 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     String baseURL;
     List<String> idReference;
     SpinnerDialogue spinnerDialogue;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people_event_list);
+
         baseURL=getString(R.string.baseURL);
+
         updateList();
+
+
+
     }
 
     private void updateList() {
         listview = (ListView) findViewById(R.id.allEvents);
         String url=baseURL+"getPeopleEvents.php";
-        Log.d("URL",url);
+        Log.d("URL", url);
         List<NameValuePair> json=new ArrayList<>();
         new AsyncHttp(url,json,this);
         spinnerDialogue=new SpinnerDialogue(this,"Loading Events...");
@@ -50,6 +59,28 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_people_event_list, menu);
+        MenuItem searchItem = menu.findItem(R.id.filter);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("query sub", "submit");
+                listview.setFilterText(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("Query cha", "change");
+                if (newText.equals(""))
+                    listview.setTextFilterEnabled(false);
+                else {
+                    listview.setTextFilterEnabled(true);
+                    listview.setFilterText(newText);
+                }
+                return true;
+            }
+        });
         return true;
     }
 
@@ -92,6 +123,9 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
                         android.R.layout.simple_list_item_1, list);
                 listview.setAdapter(adapter);
                 listview.setOnItemClickListener(this);
+
+
+                listview.setTextFilterEnabled(true);
             }
             else{
                 myToast("Server Error");
