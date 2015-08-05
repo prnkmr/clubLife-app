@@ -55,6 +55,10 @@
             android:name=".PeopleDetails"
             android:label="@string/title_activity_people_details" >
         </activity>
+        <activity
+            android:name=".EventDetailsOwner"
+            android:label="@string/title_activity_event_details_owner" >
+        </activity>
     </application>
 
 </manifest>

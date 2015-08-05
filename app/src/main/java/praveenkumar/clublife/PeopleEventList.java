@@ -31,7 +31,8 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     String baseURL;
     List<String> idReference;
     SpinnerDialogue spinnerDialogue;
-
+    ArrayAdapter defaultAdapter;
+    EventList eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,13 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("query sub", "submit");
-                listview.setFilterText(query);
+                if (query.equals(""))
+                    listview.setAdapter(defaultAdapter);
+                else {
+                    EventList tEventList=eventList.filterList(query);
+                    ArrayAdapter tArrayAdapter=new ArrayAdapter(PeopleEventList.this,android.R.layout.simple_list_item_1, tEventList.getListString());
+                    listview.setAdapter(tArrayAdapter);
+                }
                 return true;
             }
 
@@ -73,10 +80,11 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
             public boolean onQueryTextChange(String newText) {
                 Log.d("Query cha", "change");
                 if (newText.equals(""))
-                    listview.setTextFilterEnabled(false);
+                    listview.setAdapter(defaultAdapter);
                 else {
-                    listview.setTextFilterEnabled(true);
-                    listview.setFilterText(newText);
+                    EventList tEventList=eventList.filterList(newText);
+                    ArrayAdapter tArrayAdapter=new ArrayAdapter(PeopleEventList.this,android.R.layout.simple_list_item_1, tEventList.getListString());
+                    listview.setAdapter(tArrayAdapter);
                 }
                 return true;
             }
@@ -108,20 +116,19 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
         }
 
 
-        ArrayList<String> list = new ArrayList<String>();
-        idReference=new ArrayList<String>();
+        eventList=new EventList();
         try {
             JSONObject json=new JSONObject(response);
             if(json.getInt("errorCode")==0){
                 JSONArray events=json.getJSONArray("list");
                 for (int i = 0; i < events.length(); ++i) {
                     JSONArray event=(JSONArray)events.get(i);
-                    list.add((String)event.get(1));
-                    idReference.add((String)event.get(0));
+                    eventList.add((String)event.get(0),(String)event.get(1));
+
                 }
-                final ArrayAdapter adapter = new ArrayAdapter(this,
-                        android.R.layout.simple_list_item_1, list);
-                listview.setAdapter(adapter);
+                defaultAdapter = new ArrayAdapter(this,
+                        android.R.layout.simple_list_item_1, eventList.getListString());
+                listview.setAdapter(defaultAdapter);
                 listview.setOnItemClickListener(this);
 
 

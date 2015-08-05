@@ -117,10 +117,10 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent registeredUsersIntent = new Intent(this,PeopleRegisteredToEvent.class);
-        registeredUsersIntent.putExtra("eventId",idReference.get(position));
-        registeredUsersIntent.putExtra("eventName",list.get(position));
-        startActivity(registeredUsersIntent);
+        Intent eventDetailsOwner = new Intent(this,EventDetailsOwner.class);
+        eventDetailsOwner.putExtra("eventId",idReference.get(position));
+        eventDetailsOwner.putExtra("eventName",list.get(position));
+        startActivity(eventDetailsOwner);
     }
 
     void addEvent(){
