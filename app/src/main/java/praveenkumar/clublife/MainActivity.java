@@ -124,6 +124,8 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             spinnerDialogue = null;
         }
         myToast("welcome " + pref.getString("userName",""));
+        startService(new Intent(getApplicationContext(),TokenReceiver.class));
+
         startActivity(new Intent(getBaseContext(),PeopleEventList.class));
         finish();
     }
