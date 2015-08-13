@@ -70,14 +70,19 @@ public class TokenReceiver extends IntentService {
     protected void onHandleIntent(Intent intent) {
         InstanceID instanceID = InstanceID.getInstance(this);
         try {
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+            String token = instanceID.getToken(getString(R.string.gcmSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.d("Token", token);
             ArrayList json=new ArrayList();
-            SharedPreferences pref=getSharedPreferences("clublife", MODE_PRIVATE);
-            json.add(new BasicNameValuePair("userid", pref.getString("userId", "")));
+            json.add(new BasicNameValuePair("userId", intent.getExtras().getString("userId", "")));
             json.add(new BasicNameValuePair("token", token));
-            String url=getString(R.string.baseURL)+"updateToken.php";
+            String url;
+            if("people".equals(intent.getExtras().getString("usertype",""))) {
+                url = getString(R.string.baseURL) + "updateUserToken.php";
+            }
+            else {
+                url = getString(R.string.baseURL) + "updateOwnerToken.php";
+            }
             new AsyncHttp(url, json, new AsyncHttpListener() {
                 @Override
                 public void onResponse(String response) {

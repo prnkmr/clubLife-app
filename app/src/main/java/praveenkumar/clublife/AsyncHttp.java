@@ -29,9 +29,10 @@ public class AsyncHttp extends AsyncTask{
     HttpPost post;
     List jsonObject;
     HttpClient client;
-    String resp=null;
+    String resp=null,url;
     public AsyncHttpListener caller;
     AsyncHttp( String url, List jsonObject,AsyncHttpListener caller) {
+        this.url=url;
         this.caller=caller;
         HttpParams httpParameters = new BasicHttpParams();
         this.jsonObject=jsonObject;
@@ -47,6 +48,7 @@ public class AsyncHttp extends AsyncTask{
 
         client=new DefaultHttpClient(httpParameters);
         post=new HttpPost(url);
+
         System.out.println("Constructor done");
         execute();
     }
@@ -59,6 +61,7 @@ public class AsyncHttp extends AsyncTask{
             HttpResponse response = client.execute(post);
 
             resp= EntityUtils.toString(response.getEntity());
+            Log.d("url",url);
             Log.d("http Response:",resp);
 
         } catch (UnsupportedEncodingException e) {

@@ -29,7 +29,6 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
 
     ListView listview;
     String baseURL;
-    List<String> idReference;
     SpinnerDialogue spinnerDialogue;
     ArrayAdapter defaultAdapter;
     EventList eventList;
@@ -150,7 +149,7 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent detailsIntent=new Intent(this,PeopleEventDetails.class);
-        detailsIntent.putExtra("eventId",idReference.get(position));
+        detailsIntent.putExtra("eventId",eventList.getId(position));
         startActivity(detailsIntent);
     }
 }

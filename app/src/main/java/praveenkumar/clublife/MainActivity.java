@@ -86,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                                         try {
                                             editor.putString("userName",object.getString("name"));
                                             editor.putString("userId", accessToken.getUserId());
+                                            editor.putString("userType","people");
                                             editor.commit();
 
                                         } catch (JSONException e) {
@@ -123,10 +124,11 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             spinnerDialogue.cancel();
             spinnerDialogue = null;
         }
-        myToast("welcome " + pref.getString("userName",""));
-        startService(new Intent(getApplicationContext(),TokenReceiver.class));
+        myToast("welcome " + pref.getString("userName", ""));
 
-        startActivity(new Intent(getBaseContext(),PeopleEventList.class));
+
+        startActivity(new Intent(getBaseContext(), PeopleEventList.class));
+        registerGCM("people");
         finish();
     }
 
@@ -206,12 +208,15 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                     id=json.getInt("userId");
                     String hotelName=json.getString("hotelName");
                     String address=json.getString("address");
+                    editor.putString("userId", id+"");
+                    editor.putString("userType","owner");
+                    editor.commit();
                     startActivity(new Intent(getApplicationContext(),ownerEventList.class));
+                    registerGCM("owner");
                     finish();
                 }
 
-                editor.putString("userId", id+"");
-                editor.commit();
+
             }else if(json.getInt("errorCode")==5) {
                 myToast("Wrong Username/Password");
             }else{
@@ -225,6 +230,14 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
         }
 
     }
+
+    private void registerGCM(String userType) {
+        Intent intent=new Intent(getApplicationContext(), TokenReceiver.class);
+        intent.putExtra("userType",userType);
+        intent.putExtra("userId",pref.getString("userId",""));
+        startService(intent);
+    }
+
     void validateLogin(JSONObject FBjson){
         String url=baseURL+"checkFBLogin.php";
         myLog(url);
