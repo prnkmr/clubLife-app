@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 public class EventDetailsOwner extends ActionBarActivity implements ActionBar.TabListener,RegisteredPeople.OnFragmentInteractionListener,ConfirmedPeople
 .OnFragmentInteractionListener{
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -33,7 +32,6 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -44,8 +42,6 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details_owner);
-
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -56,30 +52,11 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
             Log.d("Null", "Null");
             return;
         }
-
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.addTab(actionBar.newTab().setText("Registration").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Confirmation").setTabListener(this));
-
-
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
-                        actionBar.setSelectedNavigationItem(position);
-                    }
-                });
-
     }
 
 
@@ -96,12 +73,10 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -131,7 +106,6 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -158,12 +132,25 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-
             }
             return null;
         }
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        // When swiping between pages, select the
+                        // corresponding tab.
+                        actionBar.setSelectedNavigationItem(position);
+                    }
+                });
+    }
 }

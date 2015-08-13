@@ -23,6 +23,7 @@ public class SpinnerDialogue {
     }
 
     void cancel(){
+
         loading.cancel();
     }
 

@@ -74,14 +74,18 @@ public class TokenReceiver extends IntentService {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.d("Token", token);
             ArrayList json=new ArrayList();
-            json.add(new BasicNameValuePair("userId", intent.getExtras().getString("userId", "")));
+            json.add(new BasicNameValuePair("userId", intent.getExtras().getString(AppData.USER_ID_KEY, "")));
             json.add(new BasicNameValuePair("token", token));
-            String url;
-            if("people".equals(intent.getExtras().getString("usertype",""))) {
+            String url,usertype;
+            usertype=intent.getExtras().getString(AppData.USER_TYPE_KEY,"");
+            if(AppData.USER_TYPE_PEOPLE.equals(usertype)) {
                 url = getString(R.string.baseURL) + "updateUserToken.php";
             }
-            else {
+            else if(AppData.USER_TYPE_OWNER.equals(usertype)){
                 url = getString(R.string.baseURL) + "updateOwnerToken.php";
+            }else{
+                System.out.println("User type not regocnized"+usertype);
+                return;
             }
             new AsyncHttp(url, json, new AsyncHttpListener() {
                 @Override

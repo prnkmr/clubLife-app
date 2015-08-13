@@ -34,7 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity implements AsyncHttpListener{
+
+public class MainActivity extends ActionBarActivity implements AsyncHttpListener,AppData{
 
     CallbackManager callbackManager;
     FacebookSdk facebook;
@@ -46,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        pref = getSharedPreferences("clublife", Context.MODE_PRIVATE);
+        pref = getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
         editor = pref.edit();
 
         facebook=new FacebookSdk();
@@ -84,9 +85,9 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                                             GraphResponse response) {
                                         Log.d("user Json", object.toString());
                                         try {
-                                            editor.putString("userName",object.getString("name"));
-                                            editor.putString("userId", accessToken.getUserId());
-                                            editor.putString("userType","people");
+                                            editor.putString(USERNAME_KEY,object.getString("name"));
+                                            editor.putString(USER_ID_KEY, accessToken.getUserId());
+                                            editor.putString(USER_TYPE_KEY,USER_TYPE_PEOPLE);
                                             editor.commit();
 
                                         } catch (JSONException e) {
@@ -124,11 +125,11 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             spinnerDialogue.cancel();
             spinnerDialogue = null;
         }
-        myToast("welcome " + pref.getString("userName", ""));
+        myToast("welcome " + pref.getString(USERNAME_KEY, ""));
 
 
         startActivity(new Intent(getBaseContext(), PeopleEventList.class));
-        registerGCM("people");
+        registerGCM(USER_TYPE_PEOPLE);
         finish();
     }
 
@@ -200,19 +201,22 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             JSONObject json=new JSONObject(response);
             if(json.getInt("errorCode")==0){
                 int id;
-                if("people".equals(json.getString("userType"))) {
-                    id = json.getInt("userId");
+                id = json.getInt("userId");
+                editor.putString(USER_ID_KEY, id+"");
+                editor.commit();
+                if("people".equals(json.getString(USER_TYPE_KEY))) {
+
                     onLogin();
                     //startActivity(new Intent(getApplicationContext(),));
                 }else{
-                    id=json.getInt("userId");
+
                     String hotelName=json.getString("hotelName");
                     String address=json.getString("address");
-                    editor.putString("userId", id+"");
-                    editor.putString("userType","owner");
-                    editor.commit();
+
+
+
                     startActivity(new Intent(getApplicationContext(),ownerEventList.class));
-                    registerGCM("owner");
+                    registerGCM(USER_TYPE_OWNER);
                     finish();
                 }
 
@@ -233,8 +237,8 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
 
     private void registerGCM(String userType) {
         Intent intent=new Intent(getApplicationContext(), TokenReceiver.class);
-        intent.putExtra("userType",userType);
-        intent.putExtra("userId",pref.getString("userId",""));
+        intent.putExtra(USER_TYPE_KEY,userType);
+        intent.putExtra(USER_ID_KEY,pref.getString(AppData.USER_ID_KEY,""));
         startService(intent);
     }
 

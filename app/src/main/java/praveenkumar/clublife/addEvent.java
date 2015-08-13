@@ -31,6 +31,8 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
 
 
     private boolean dateSet=false,timeSet=false;
+    private SpinnerDialogue spinnerDialogue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +120,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
         json.add(new BasicNameValuePair("eventName",eventName));
         json.add(new BasicNameValuePair("dateTime",date+" "+time));
         json.add(new BasicNameValuePair("ticketCount",ticketCount));
+        spinnerDialogue=new SpinnerDialogue(this,"Creating Event...");
         new AsyncHttp(url,json,this);
 
 
@@ -131,7 +134,10 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
 
     @Override
     public void onResponse(String response) {
+
+        spinnerDialogue.cancel();
         if(response==null){
+            myToast("Try Again");
             return;
         }
 

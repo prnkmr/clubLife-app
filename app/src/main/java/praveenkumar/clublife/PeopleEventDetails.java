@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpListener {
+public class PeopleEventDetails extends ActionBarActivity implements AppData, AsyncHttpListener {
     TextView eventTitleText,dateText,timeText,locationText,addressText,ticketCountText;
     String baseURL,eventId;
     SharedPreferences preferences;
@@ -32,8 +32,8 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences=getSharedPreferences("clublife", MODE_PRIVATE);
-        eventId=getIntent().getExtras().getString("eventId");
+        preferences=getSharedPreferences(SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+        eventId=getIntent().getExtras().getString(EVENT_ID_KEY);
         setContentView(R.layout.activity_people_event_details);
         baseURL=getString(R.string.baseURL);
         eventTitleText=(TextView)findViewById(R.id.eventTitle);
@@ -117,8 +117,8 @@ public class PeopleEventDetails extends ActionBarActivity implements AsyncHttpLi
 
     public  void registerEvent(View view){
         String url=baseURL+"registerToEvent.php";
-        String userId=preferences.getString("userId","");
-        String userName=preferences.getString("userName","");
+        String userId=preferences.getString(USER_ID_KEY,"");
+        String userName=preferences.getString(USERNAME_KEY,"");
 
         List<NameValuePair> json=new ArrayList<>();
         json.add(new BasicNameValuePair("userId",userId));
