@@ -73,6 +73,8 @@ public class TokenReceiver extends IntentService {
             String token = instanceID.getToken(getString(R.string.gcmSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.d("Token", token);
+            new AppNotification(this,"Token",token);
+
             ArrayList json=new ArrayList();
             json.add(new BasicNameValuePair("userId", intent.getExtras().getString(AppData.USER_ID_KEY, "")));
             json.add(new BasicNameValuePair("token", token));

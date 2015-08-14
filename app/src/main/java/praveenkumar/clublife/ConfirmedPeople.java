@@ -66,7 +66,7 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
     }
 
     public ConfirmedPeople() {
-        // Required empty public constructor
+
     }
 
     @Override
