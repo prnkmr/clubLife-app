@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        new AppNotification(this,"Welcome","To Clublife");
+
 
 
         pref = getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
