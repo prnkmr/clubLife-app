@@ -1,6 +1,7 @@
 package praveenkumar.clublife;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +36,7 @@ import java.util.List;
 
 
 
-public class MainActivity extends ActionBarActivity implements AsyncHttpListener,AppData{
+public class MainActivity extends Activity implements AsyncHttpListener,AppData{
 
     CallbackManager callbackManager;
     FacebookSdk facebook;

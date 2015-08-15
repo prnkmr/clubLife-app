@@ -1,8 +1,29 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+
+
     </style>
 
+    <style name="text">
+        <item name="android:textColor">#212121</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">#66424242</item>
+    </style>
+
+    <style name="loginbutton">
+        <item name="android:background">#212121</item>
+        <item name="android:textColor">#f5f5f5</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+    <style name="LoginPage" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:textColor">#fafafa</item>
+    </style>
+    <style name="FbBtn">
+        <item name="android:padding">15dp</item>
+        <item name="android:elevation">4dp</item>
+    </style>
 </resources>

@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 
 public class EventDetailsOwner extends ActionBarActivity implements ActionBar.TabListener,RegisteredPeople.OnFragmentInteractionListener,ConfirmedPeople
-.OnFragmentInteractionListener{
+        .OnFragmentInteractionListener,OwnerEventDetails.OnFragmentInteractionListener{
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -53,6 +53,7 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
             return;
         }
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.addTab(actionBar.newTab().setText("Details").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Registration").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Confirmation").setTabListener(this));
         // Create the adapter that will return a fragment for each of the three
@@ -114,14 +115,15 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position==0) return new RegisteredPeople();
+            if(position==0) return new OwnerEventDetails();
+            else if(position==1) return new RegisteredPeople();
             else return new ConfirmedPeople();
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -129,9 +131,11 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return "Details".toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return "Registers".toUpperCase(l);
+                case 2:
+                    return "Confirms".toUpperCase(l);
             }
             return null;
         }
