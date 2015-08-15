@@ -49,7 +49,6 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
         super.onCreate(savedInstanceState);
 
 
-
         pref = getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
         editor = pref.edit();
 

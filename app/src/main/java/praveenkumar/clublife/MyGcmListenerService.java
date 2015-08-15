@@ -23,7 +23,7 @@ public class MyGcmListenerService extends GcmListenerService {
         String message=data.getString("message");
         String title=data.getString("title");
         Log.d("Push Message", message);
-        new AppNotification(this,title,message);
+        new AppNotification(this,title,message,1);
     }
 
 

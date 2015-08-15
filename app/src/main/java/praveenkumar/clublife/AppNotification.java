@@ -8,7 +8,7 @@ import android.support.v4.app.NotificationCompat;
  * Created by Praveen kumar on 14/08/2015.
  */
 public class AppNotification {
-    AppNotification(Context from,String title,String message){
+    AppNotification(Context from,String title,String message,int id){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(from)
                         .setSmallIcon(R.drawable.notification_icon)
@@ -31,7 +31,7 @@ public class AppNotification {
         NotificationManager mNotificationManager =
                 (NotificationManager) from.getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
-        int mId=1;
-        mNotificationManager.notify(mId, mBuilder.build());
+
+        mNotificationManager.notify(id, mBuilder.build());
     }
 }
