@@ -11,5 +11,9 @@ public interface AppData {
     SHARED_PREFERENCE_KEY="clublife",
     USERNAME_KEY="username",
     EVENT_ID_KEY="eventId",
-    EVENT_NAME_KEY="eventName";
+    EVENT_NAME_KEY="eventName",
+    TICKET_ID_KEY="ticketId",
+    DATE_KEY="date",
+    TIME_KEY="time",
+    ERROR_CODE_KEY="errorCode";
 }

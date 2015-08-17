@@ -115,10 +115,11 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/register"
-        android:layout_marginTop="77dp"
+        android:layout_marginTop="44dp"
         android:onClick="registerEvent"
-        android:layout_below="@+id/time"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textView6"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_alignEnd="@+id/textView1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -140,5 +141,15 @@
         android:layout_toRightOf="@+id/textView6"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/share"
+        android:layout_alignTop="@+id/register"
+        android:layout_toRightOf="@+id/register"
+        android:layout_toEndOf="@+id/register" />
 
 </RelativeLayout>

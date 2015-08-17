@@ -33,7 +33,7 @@ import java.util.List;
  * Use the {@link RegisteredPeople#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegisteredPeople extends Fragment implements AsyncHttpListener,  AdapterView.OnItemClickListener{
+public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListener,  AdapterView.OnItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,7 +78,7 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         baseURL=getString(R.string.baseURL);
-        userId=getActivity().getIntent().getStringExtra("userId");
+        userId=getActivity().getIntent().getStringExtra(USER_ID_KEY);
     }
 
     @Override
@@ -88,7 +88,8 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
         View view =inflater.inflate(R.layout.fragment_registered_people, container, false);
         listView=(ListView)view.findViewById(R.id.registeredUsers);
 
-        eventId=getActivity().getIntent().getExtras().getString("eventId");
+        eventId=getActivity().getIntent().getExtras().getString(EVENT_ID_KEY);
+        eventName=getActivity().getIntent().getExtras().getString(EVENT_NAME_KEY);
 
         updateList();
         return view;
@@ -97,7 +98,7 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
     void updateList(){
         String url=baseURL+"getRegisteredUsers.php";
         List<NameValuePair> json=new ArrayList<>();
-        json.add(new BasicNameValuePair("eventId", eventId));
+        json.add(new BasicNameValuePair(EVENT_ID_KEY, eventId));
         new AsyncHttp(url,json,this);
         spinnerDialogue=new SpinnerDialogue(getActivity(),"Loding User List...");
     }
@@ -140,8 +141,9 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Clicked", position + "");
         Intent userDetailsIntent=new Intent(getActivity(),PeopleDetails.class);
-        userDetailsIntent.putExtra("userId",idReference.get(position));
-        userDetailsIntent.putExtra("ticketId",ticketIdReference.get(position));
+        userDetailsIntent.putExtra(USER_ID_KEY,idReference.get(position));
+        userDetailsIntent.putExtra(TICKET_ID_KEY,ticketIdReference.get(position));
+        userDetailsIntent.putExtra(EVENT_NAME_KEY,eventName);
         startActivity(userDetailsIntent);
     }
 
@@ -169,6 +171,10 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
         mListener = null;
     }
 
+    public  void edit(View view){
+        
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -179,6 +185,8 @@ public class RegisteredPeople extends Fragment implements AsyncHttpListener,  Ad
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);

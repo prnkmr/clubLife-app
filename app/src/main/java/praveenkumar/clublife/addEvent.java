@@ -1,6 +1,7 @@
 package praveenkumar.clublife;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class addEvent extends ActionBarActivity implements AsyncHttpListener {
+public class addEvent extends ActionBarActivity implements AsyncHttpListener, DatePickListener, TimePickListener {
 
     EditText eventNameText,ticketCountText;
     String date,time;
@@ -68,7 +69,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
 
     public void showDatePickerDialog(View v) {
         DatePickerFragment dateFragment = new DatePickerFragment();
-        dateFragment.setCaller(this);
+        dateFragment.setDatePickListener(this);
 
         dateFragment.show(getSupportFragmentManager(), "datePicker");
 
@@ -76,27 +77,27 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
 
     public void showTimePickerDialog(View v) {
         TimePickerFragment newFragment = new TimePickerFragment();
-        newFragment.setCaller(this);
+        newFragment.setTimePickListener(this);
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
-    void onDateSet(String date){
+    public void onDateSet(String date){
         TextView dateText=(TextView)findViewById(R.id.date);
         dateText.setText(date);
         this.date=date;
         dateSet=true;
     }
 
-    void onTimeSet(String time){
+    public void onTimeSet(String time){
         TextView timeText=(TextView)findViewById(R.id.time);
         timeText.setText(time);
         this.time=time;
         timeSet=true;
     }
-
+    String eventName,ticketCount,userId;
     public void addNewEvent(View v){
-        String eventName=eventNameText.getText().toString();
-        String ticketCount=ticketCountText.getText().toString();
-        String userId=sharedPreference.getString("userId","");
+        eventName=eventNameText.getText().toString();
+        ticketCount=ticketCountText.getText().toString();
+        userId=sharedPreference.getString("userId", "");
         if("".equals(eventName)){
             myToast("Give an Event Name");
             return;
@@ -114,14 +115,24 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener {
             return;
         }
 
-        String url=baseURL+"addEvent.php";
-        List<NameValuePair> json=new ArrayList<>();
-        json.add(new BasicNameValuePair("userId",userId));
-        json.add(new BasicNameValuePair("eventName",eventName));
-        json.add(new BasicNameValuePair("dateTime",date+" "+time));
-        json.add(new BasicNameValuePair("ticketCount",ticketCount));
         spinnerDialogue=new SpinnerDialogue(this,"Creating Event...");
-        new AsyncHttp(url,json,this);
+        new Locator(this, new LocatorListener() {
+            @Override
+            public void onLocated(Location location) {
+                String url=baseURL+"addEvent.php";
+                HttpParam json=new HttpParam();
+                json.add("userId",userId);
+                json.add("eventName",eventName);
+                json.add("dateTime",date+" "+time);
+                json.add("ticketCount",ticketCount);
+                json.add("lat",String.valueOf(location.getLatitude()));
+                json.add("lonn",String.valueOf(location.getLongitude()));
+
+
+                new AsyncHttp(url,json,addEvent.this);
+            }
+        });
+
 
 
 

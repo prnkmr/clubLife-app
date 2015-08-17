@@ -2,7 +2,9 @@ package praveenkumar.clublife;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,13 +50,17 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
 
     private OnFragmentInteractionListener mListener;
     private String eventId;
-    private TextView eventTitleText;
+    private EditText eventTitleText;
     private TextView dateText;
     private TextView timeText;
-    private TextView ticketCountText;
+    private EditText ticketCountText;
     private String baseURL;
     private SpinnerDialogue spinnerDialogue;
     private Button deleteButton;
+    private Button editButton;
+    private String dateString;
+    private String timeString;
+    private Button downloadButton;
 
     /**
      * Use this factory method to create a new instance of
@@ -93,30 +100,52 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
         View view= inflater.inflate(R.layout.fragment_owner_event_details, container, false);
 
         eventId=getActivity().getIntent().getExtras().getString(EVENT_ID_KEY);
-        eventTitleText=(TextView)view.findViewById(R.id.eventTitle);
+        eventTitleText=(EditText)view.findViewById(R.id.eventTitle);
         dateText=(TextView)view.findViewById(R.id.date);
         timeText=(TextView)view.findViewById(R.id.time);
-        ticketCountText=(TextView)view.findViewById(R.id.ticketCount);
+        ticketCountText=(EditText)view.findViewById(R.id.ticketCount);
+
+        eventTitleText.setFocusable(false);
+        ticketCountText.setFocusable(false);
         baseURL=getString(R.string.baseURL);
         updateData();
         deleteButton=(Button)view.findViewById(R.id.deleteEvent);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new ConfirmDialogue();
+                ConfirmDialogue newFragment = new ConfirmDialogue();
+                newFragment.setId(eventId,getActivity());
                 newFragment.show(getActivity().getSupportFragmentManager(), "Notice");
 
 
 
             }
         });
+
+        editButton=(Button)view.findViewById(R.id.editDetails);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editEvent(v);
+            }
+        });
+
+        downloadButton=(Button)view.findViewById(R.id.download);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baseURL+"downloadExcel.php?eventId="+eventId));
+                startActivity(browserIntent);
+            }
+        });
+
         return view;
     }
 
     private void updateData() {
         String url=baseURL+"getEventDetailsPeople.php";
         List<NameValuePair> json=new ArrayList<>();
-        json.add(new BasicNameValuePair("eventId",eventId));
+        json.add(new BasicNameValuePair("eventId", eventId));
         new AsyncHttp(url,json,this);
         spinnerDialogue=new SpinnerDialogue(getActivity(),"Loading Event Details...");
 
@@ -145,6 +174,89 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
         super.onDetach();
         mListener = null;
     }
+
+    public void editEvent(View v) {
+
+        if(editButton.getText().toString().equals("Edit")) {
+            editButton.setText("Update");
+            eventTitleText.setFocusable(true);
+            eventTitleText.setFocusableInTouchMode(true);
+            ticketCountText.setFocusable(true);
+            ticketCountText.setFocusableInTouchMode(true);
+            dateText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatePickerFragment dateFragment = new DatePickerFragment();
+                    dateFragment.setDatePickListener(new DatePickListener() {
+                        @Override
+                        public void onDateSet(String dateString) {
+                            OwnerEventDetails.this.dateString = dateString;
+                            dateText.setText(dateString);
+                        }
+                    });
+
+                    dateFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+                }
+            });
+            timeText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TimePickerFragment timeFragment=new TimePickerFragment();
+                    timeFragment.setTimePickListener(new TimePickListener() {
+                        @Override
+                        public void onTimeSet(String timeString) {
+                            OwnerEventDetails.this.timeString=timeString;
+                            timeText.setText(timeString);
+                        }
+                    });
+                    timeFragment.show(getActivity().getSupportFragmentManager(),"timePicker");
+                }
+            });
+        }else{
+            updateDetails();
+            editButton.setText("Edit");
+            eventTitleText.setFocusable(false);
+            ticketCountText.setFocusable(false);
+            dateText.setOnClickListener(null);
+            timeText.setOnClickListener(null);
+
+        }
+
+    }
+
+    private void updateDetails() {
+        String url=baseURL+"updateEventDetails.php";
+        HttpParam param=new HttpParam();
+        param.add(EVENT_ID_KEY,eventId);
+        param.add(EVENT_NAME_KEY,eventTitleText.getText().toString());
+        param.add("dateTime",dateString+" "+timeString);
+        param.add("ticketCount",ticketCountText.getText().toString());
+        final SpinnerDialogue dialogue=new SpinnerDialogue(getActivity(),"Updating...");
+        new AsyncHttp(url, param, new AsyncHttpListener() {
+            @Override
+            public void onResponse(String response) {
+                dialogue.cancel();
+                if(response==null){
+                    myToast("TryAgain");
+                    return;
+                }
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    if(jsonObject.getInt(ERROR_CODE_KEY)==0){
+                        myToast("Success");
+                    }else{
+                        myToast("Update Fail");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+    }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -179,8 +291,10 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
                 try {
                     Date date = formater.parse(dateTime);
                     dateText.setText(new SimpleDateFormat("EEE, dd-MMM-yy").format(date));
+                    dateString=new SimpleDateFormat("yyyy-MM-dd").format(date);
                     Time time=new Time(date.getTime());
                     timeText.setText(new SimpleDateFormat("h:mm a").format(date));
+                    timeString=new SimpleDateFormat("HH:mm:ss").format(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -197,5 +311,7 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
     private void myToast(String s) {
         Toast.makeText(getActivity().getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
+
+
 
 }

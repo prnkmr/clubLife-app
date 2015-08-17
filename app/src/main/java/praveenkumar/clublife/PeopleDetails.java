@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PeopleDetails extends ActionBarActivity implements AsyncHttpListener {
+public class PeopleDetails extends ActionBarActivity implements AppData,AsyncHttpListener {
     TextView peopleNameText,FBLinkText;
     String baseURL,userId;
     SpinnerDialogue spinnerDialogue;
@@ -28,11 +28,11 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         baseURL=getString(R.string.baseURL);
-        userId=getIntent().getStringExtra("userId");
+        userId=getIntent().getStringExtra(USER_ID_KEY);
         setContentView(R.layout.activity_people_details);
         peopleNameText=(TextView)findViewById(R.id.userName);
         FBLinkText=(TextView)findViewById(R.id.FBLink);
-        peopleNameText.setText(getIntent().getStringExtra("userName"));
+        peopleNameText.setText(getIntent().getStringExtra(USERNAME_KEY));
         Log.d("userId", userId);
         String url=baseURL+"getUserDetails.php";
         ArrayList json=new ArrayList();
@@ -99,7 +99,8 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
     public void confirmTicket(View view){
         String url=baseURL+"confirmTicket.php";
         ArrayList param=new ArrayList();
-        param.add(new BasicNameValuePair("ticketId",getIntent().getStringExtra("ticketId")));
+        param.add(new BasicNameValuePair(TICKET_ID_KEY,getIntent().getStringExtra(TICKET_ID_KEY)));
+        param.add(new BasicNameValuePair(EVENT_NAME_KEY,getIntent().getStringExtra(EVENT_NAME_KEY)));
         new AsyncHttp(url, param, new AsyncHttpListener() {
             @Override
             public void onResponse(String response) {
@@ -125,7 +126,8 @@ public class PeopleDetails extends ActionBarActivity implements AsyncHttpListene
     public void cancelTicket(View view){
         String url=baseURL+"cancelTicket.php";
         ArrayList param=new ArrayList();
-        param.add(new BasicNameValuePair("ticketId",getIntent().getStringExtra("ticketId")));
+        param.add(new BasicNameValuePair(TICKET_ID_KEY,getIntent().getStringExtra(TICKET_ID_KEY)));
+        param.add(new BasicNameValuePair(EVENT_NAME_KEY,getIntent().getStringExtra(EVENT_NAME_KEY)));
         new AsyncHttp(url, param, new AsyncHttpListener() {
             @Override
             public void onResponse(String response) {

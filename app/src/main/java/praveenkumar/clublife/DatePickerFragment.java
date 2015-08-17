@@ -14,9 +14,9 @@ import java.util.Calendar;
  */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
-addEvent caller;
-    void setCaller(addEvent caller){
-        this.caller=caller;
+DatePickListener listener;
+    void setDatePickListener(DatePickListener listener){
+        this.listener=listener;
 
     }
 
@@ -37,6 +37,6 @@ addEvent caller;
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
         String date=year+"-"+(month+1)+"-"+day;
-        caller.onDateSet(date);
+        listener.onDateSet(date);
     }
 }

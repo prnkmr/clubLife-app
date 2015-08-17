@@ -2,6 +2,7 @@ package praveenkumar.clublife;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -25,13 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PeopleEventList extends ActionBarActivity implements AsyncHttpListener, AdapterView.OnItemClickListener {
+public class PeopleEventList extends ActionBarActivity implements AppData,AsyncHttpListener, AdapterView.OnItemClickListener {
 
     ListView listview;
     String baseURL;
     SpinnerDialogue spinnerDialogue;
     ArrayAdapter defaultAdapter;
     EventList eventList;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
         setContentView(R.layout.activity_people_event_list);
 
         baseURL=getString(R.string.baseURL);
+        pref=getSharedPreferences(SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+
 
         updateList();
 
@@ -47,11 +51,22 @@ public class PeopleEventList extends ActionBarActivity implements AsyncHttpListe
     }
 
     private void updateList() {
+        String lat,lon;
+        lat=pref.getString("lat","");
+        lon=pref.getString("lon","");
         listview = (ListView) findViewById(R.id.allEvents);
-        String url=baseURL+"getPeopleEvents.php";
+        String url;
+        HttpParam param=new HttpParam();
+
+        if(lat.equals("")||lon.equals("")){
+            url=baseURL+"getPeopleEvents.php";
+        }else{
+            url=baseURL+"getClosestEvents.php";
+            param.add("lat",lat);
+            param.add("lon",lon);
+        }
         Log.d("URL", url);
-        List<NameValuePair> json=new ArrayList<>();
-        new AsyncHttp(url,json,this);
+        new AsyncHttp(url,param,this);
         spinnerDialogue=new SpinnerDialogue(this,"Loading Events...");
     }
 

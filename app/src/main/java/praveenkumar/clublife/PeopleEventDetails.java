@@ -1,8 +1,11 @@
 package praveenkumar.clublife;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +32,9 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
     String baseURL,eventId;
     SharedPreferences preferences;
     SpinnerDialogue spinnerDialogue;
+    Button shareButton;
+    private ShareActionProvider mShareActionProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +48,7 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
         locationText=(TextView)findViewById(R.id.location);
         addressText=(TextView)findViewById(R.id.address);
         ticketCountText=(TextView)findViewById(R.id.ticketCount);
+        shareButton=(Button)findViewById(R.id.share);
         updateData();
 
     }
@@ -59,6 +66,13 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_people_event_details, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        // Fetch and store ShareActionProvider
+
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
         return true;
     }
 
@@ -149,5 +163,12 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
         });
 
 
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 }

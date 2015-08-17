@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
+import java.sql.Time;
 import java.util.Calendar;
 
 /**
@@ -14,9 +15,9 @@ import java.util.Calendar;
  */
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
-    addEvent caller;
-    void setCaller(addEvent caller){
-        this.caller=caller;
+    TimePickListener listener;
+    void setTimePickListener(TimePickListener listener){
+        this.listener=listener;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,6 +33,6 @@ public class TimePickerFragment extends DialogFragment
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         String time=hourOfDay+":"+minute+":00";
-        caller.onTimeSet(time);
+        listener.onTimeSet(time);
     }
 }

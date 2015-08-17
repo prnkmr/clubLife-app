@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
 
         super.onCreate(savedInstanceState);
 
-
+        Locator locator=new Locator(this);
         pref = getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
         editor = pref.edit();
 
