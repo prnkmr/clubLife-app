@@ -5,4 +5,5 @@
     <color name="textviewText">#212121</color>
     <color name="textviewBg">#66424242</color>
     <color name="loginPageText">#fafafa</color>
+    <color name="ActionBarColor">#f9a825</color>
 </resources>

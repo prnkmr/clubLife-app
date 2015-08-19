@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+  <!--      <item name="actionBarStyle">@style/CustomActionBar</item>-->
     </style>
 
     <style name="text">
@@ -23,5 +23,8 @@
     <style name="FbBtn">
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:elevation">@dimen/ButtonElevation</item>
+    </style>
+    <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="background">@color/ActionBarColor</item>
     </style>
 </resources>
