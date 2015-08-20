@@ -16,6 +16,9 @@ import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -115,6 +118,19 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            if(AccessToken.getCurrentAccessToken()!=null)
+            {
+
+                LoginManager.getInstance().logOut();
+
+            }
+
+            myToast("Logging out..");
+            SharedPreferences.Editor editor=pref.edit();
+            editor.putBoolean(LOGGED_IN_KEY,false);
+            editor.commit();
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             return true;
         }
 

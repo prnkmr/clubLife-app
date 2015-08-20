@@ -15,5 +15,7 @@ public interface AppData {
     TICKET_ID_KEY="ticketId",
     DATE_KEY="date",
     TIME_KEY="time",
-    ERROR_CODE_KEY="errorCode";
+    ERROR_CODE_KEY="errorCode",
+    LOGGED_IN_KEY="loggedIn";
+
 }

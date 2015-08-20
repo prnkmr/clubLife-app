@@ -2,6 +2,7 @@ package praveenkumar.clublife;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -29,10 +33,12 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     ListView listview;
     List<String> idReference,list;
     SpinnerDialogue spinnerDialogue;
+    SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_event_list);
+        pref=getSharedPreferences(AppData.SHARED_PREFERENCE_KEY,MODE_PRIVATE);
         baseURL=getString(R.string.baseURL);
         Button newEvent=(Button)findViewById(R.id.addEvent);
         newEvent.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +79,12 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            myToast("Logging out..");
+            SharedPreferences.Editor editor=pref.edit();
+            editor.putBoolean(AppData.LOGGED_IN_KEY,false);
+            editor.commit();
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             return true;
         }
 

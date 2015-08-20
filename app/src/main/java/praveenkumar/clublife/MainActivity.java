@@ -124,8 +124,13 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                     }
                 });
 
-
-
+        if(pref.getBoolean(LOGGED_IN_KEY,false)){
+            if(pref.getString(USER_TYPE_KEY,"").equals(USER_TYPE_OWNER)){
+                onLoginOwner();
+            }else{
+                onLoginPeople();
+            }
+        }
     }
 
     private void onLoginPeople() {
@@ -134,8 +139,6 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
             spinnerDialogue = null;
         }
         myToast("welcome " + pref.getString(USERNAME_KEY, ""));
-
-
         startActivity(new Intent(getBaseContext(), PeopleEventList.class));
         registerGCM(USER_TYPE_PEOPLE);
         finish();
@@ -214,8 +217,13 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                 editor.commit();
                 if("people".equals(json.getString(USER_TYPE_KEY))) {
                     onLoginPeople();
+                    editor.putBoolean(LOGGED_IN_KEY,true);
+                    editor.commit();
                     //startActivity(new Intent(getApplicationContext(),));
                 }else{
+                    editor.putString(USER_TYPE_KEY,USER_TYPE_OWNER);
+                    editor.putBoolean(LOGGED_IN_KEY,true);
+                    editor.commit();
                     onLoginOwner();
                 }
             }else if(json.getInt("errorCode")==5) {
