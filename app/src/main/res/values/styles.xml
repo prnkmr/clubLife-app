@@ -29,4 +29,7 @@
         <item name="background">@color/ActionBarColor</item>
         <item name="android:background">@color/ActionBarColor</item>
     </style>
+    <style name="List_Styling" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/listselector</item>
+    </style>
 </resources>

@@ -6,4 +6,7 @@
     <color name="textviewBg">#66424242</color>
     <color name="loginPageText">#fafafa</color>
     <color name="ActionBarColor">#f9a825</color>
+    <color name="light_grey">#cccccc</color>
+    <color name="blueshade">#40c4ff</color>
+    <color name="pinkshade">#ff80ab</color>
 </resources>
