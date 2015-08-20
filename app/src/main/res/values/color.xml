@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="loginBg">#212121</color>
+    <color name="loginText">#f5f5f5</color>
+    <color name="textviewText">#212121</color>
+    <color name="textviewBg">#66424242</color>
+    <color name="loginPageText">#fafafa</color>
+    <color name="ActionBarColor">#f9a825</color>
+</resources>

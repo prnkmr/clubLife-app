@@ -2,28 +2,31 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-
-
+        <item name="actionBarStyle">@style/CustomActionBar</item>
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
     </style>
 
     <style name="text">
-        <item name="android:textColor">#212121</item>
-        <item name="android:padding">15dp</item>
-        <item name="android:background">#66424242</item>
+        <item name="android:textColor">@color/textviewText</item>
+        <item name="android:padding">@dimen/ButtonPadding</item>
+        <item name="android:background">@color/textviewBg</item>
     </style>
 
     <style name="loginbutton">
-        <item name="android:background">#212121</item>
-        <item name="android:textColor">#f5f5f5</item>
-        <item name="android:padding">15dp</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:background">@color/loginBg</item>
+        <item name="android:textColor">@color/loginText</item>
+        <item name="android:padding">@dimen/ButtonPadding</item>
+        <item name="android:elevation">@dimen/ButtonElevation</item>
     </style>
     <style name="LoginPage" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="android:textColor">#fafafa</item>
+        <item name="android:textColor">@color/loginPageText</item>
     </style>
     <style name="FbBtn">
-        <item name="android:padding">15dp</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:padding">@dimen/ButtonPadding</item>
+        <item name="android:elevation">@dimen/ButtonElevation</item>
+    </style>
+    <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="background">@color/ActionBarColor</item>
+        <item name="android:background">@color/ActionBarColor</item>
     </style>
 </resources>
