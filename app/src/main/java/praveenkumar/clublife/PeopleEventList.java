@@ -137,7 +137,8 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
                 JSONArray events=json.getJSONArray("list");
                 for (int i = 0; i < events.length(); ++i) {
                     JSONArray event=(JSONArray)events.get(i);
-                    eventList.add((String)event.get(0),(String)event.get(1));
+                    Double ddist=Double.parseDouble(String.valueOf(event.get(2)));
+                    eventList.add((String)event.get(0),(String)event.get(1),ddist);
 
                 }
                 defaultAdapter = new ArrayAdapter(this,
@@ -165,6 +166,7 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent detailsIntent=new Intent(this,PeopleEventDetails.class);
         detailsIntent.putExtra("eventId",eventList.getId(position));
+        detailsIntent.putExtra("distance",eventList.getDistance(position));
         startActivity(detailsIntent);
     }
 }

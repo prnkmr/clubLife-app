@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -57,10 +58,12 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
         facebook.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
         baseURL=getString(R.string.baseURL);
-        if(AccessToken.getCurrentAccessToken()!=null)
+
+        /*if(AccessToken.getCurrentAccessToken()!=null)
         {
             LoginManager.getInstance().logOut();
-        }
+        }*/
+
         Button loginButton=(Button)findViewById(R.id.login);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,8 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
             }
         });
         callbackManager = CallbackManager.Factory.create();
+
+
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -123,7 +128,7 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
 
     }
 
-    private void onLogin() {
+    private void onLoginPeople() {
         if(spinnerDialogue!=null) {
             spinnerDialogue.cancel();
             spinnerDialogue = null;
@@ -208,34 +213,26 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                 editor.putString(USER_ID_KEY, id+"");
                 editor.commit();
                 if("people".equals(json.getString(USER_TYPE_KEY))) {
-
-                    onLogin();
+                    onLoginPeople();
                     //startActivity(new Intent(getApplicationContext(),));
                 }else{
-
-                    String hotelName=json.getString("hotelName");
-                    String address=json.getString("address");
-
-
-
-                    startActivity(new Intent(getApplicationContext(),ownerEventList.class));
-                    registerGCM(USER_TYPE_OWNER);
-                    finish();
+                    onLoginOwner();
                 }
-
-
             }else if(json.getInt("errorCode")==5) {
                 myToast("Wrong Username/Password");
             }else{
                     myToast("Server error");
                 }
-
         } catch (JSONException e) {
-
             myToast("Cannot Connect to Server");
             e.printStackTrace();
         }
+    }
 
+    private void onLoginOwner() {
+        startActivity(new Intent(getApplicationContext(),ownerEventList.class));
+        registerGCM(USER_TYPE_OWNER);
+        finish();
     }
 
     private void registerGCM(String userType) {
@@ -258,7 +255,6 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
         }
         new AsyncHttp(url,json,this);
         spinnerDialogue=new SpinnerDialogue(this,"Logging In...");
-
     }
     void validateOwnerLogin(){
         String username=((EditText)findViewById(R.id.username)).getText().toString();

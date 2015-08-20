@@ -107,21 +107,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AutoConfirm"
-            android:id="@+id/autoConfirm"
-            android:layout_below="@+id/editDetails"
-            android:layout_toLeftOf="@+id/deleteEvent"
-            android:layout_toStartOf="@+id/deleteEvent"
-            android:layout_marginTop="42dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Download"
             android:id="@+id/download"
-            android:layout_alignBottom="@+id/autoConfirm"
-            android:layout_alignLeft="@+id/deleteEvent"
-            android:layout_alignStart="@+id/deleteEvent" />
+            android:layout_below="@+id/editDetails"
+            android:layout_alignLeft="@+id/editDetails"
+            android:layout_alignStart="@+id/editDetails"
+            android:layout_marginTop="56dp" />
 
     </RelativeLayout>
 

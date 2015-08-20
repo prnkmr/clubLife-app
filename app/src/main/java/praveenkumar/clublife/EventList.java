@@ -8,14 +8,17 @@ import java.util.ArrayList;
 public class EventList {
     ArrayList<String> listString;
     ArrayList<String> idReference;
+    ArrayList<Double> distance;
     public EventList(){
         listString=new ArrayList<>();
         idReference=new ArrayList<>();
+        distance=new ArrayList<>();
     }
 
-    public void add(String id,String lable){
+    public void add(String id,String lable,double dist){
         listString.add(lable);
         idReference.add(id);
+        distance.add(dist);
     }
 
     public String getLable(int index){
@@ -24,6 +27,7 @@ public class EventList {
     public String getId(int index){
         return idReference.get(index);
     }
+    public double getDistance(int index){ return distance.get(index); }
 
     public ArrayList<String> getListString(){
         return listString;
@@ -34,7 +38,7 @@ public class EventList {
         EventList tEventList=new EventList();
         for(int i=0;i<listString.size();i++){
             if(listString.get(i).contains(str)){
-                tEventList.add(idReference.get(i),listString.get(i));
+                tEventList.add(idReference.get(i),listString.get(i),distance.get(i));
             }
         }
         return tEventList;

@@ -50,17 +50,17 @@ public class Locator extends AsyncTask implements GoogleApiClient.ConnectionCall
 
     @Override
     public void onConnected(Bundle bundle) {
-        while (mLastLocation==null)
+        int ctr=10;
+        while (mLastLocation==null&&ctr-->0)
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-
-
-        SharedPreferences pref=ctx.getSharedPreferences(AppData.SHARED_PREFERENCE_KEY,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=pref.edit();
-        editor.putString("lat",String.valueOf(mLastLocation.getLatitude()));
-        editor.putString("lon",String.valueOf(mLastLocation.getLongitude()));
-        editor.commit();
-
+        if(mLastLocation!=null) {
+            SharedPreferences pref = ctx.getSharedPreferences(AppData.SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("lat", String.valueOf(mLastLocation.getLatitude()));
+            editor.putString("lon", String.valueOf(mLastLocation.getLongitude()));
+            editor.commit();
+        }
         if(isListener){
             listener.onLocated(mLastLocation);
         }

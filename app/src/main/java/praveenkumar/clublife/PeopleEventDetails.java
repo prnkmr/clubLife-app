@@ -28,7 +28,7 @@ import java.util.List;
 
 
 public class PeopleEventDetails extends ActionBarActivity implements AppData, AsyncHttpListener {
-    TextView eventTitleText,dateText,timeText,locationText,addressText,ticketCountText;
+    TextView eventTitleText,dateText,timeText,locationText,addressText,ticketCountText,distanceText;
     String baseURL,eventId;
     SharedPreferences preferences;
     SpinnerDialogue spinnerDialogue;
@@ -48,7 +48,10 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
         locationText=(TextView)findViewById(R.id.location);
         addressText=(TextView)findViewById(R.id.address);
         ticketCountText=(TextView)findViewById(R.id.ticketCount);
-        shareButton=(Button)findViewById(R.id.share);
+        distanceText=(TextView)findViewById(R.id.distance);
+        double kms=getIntent().getDoubleExtra("distance",0.0);
+        distanceText.setText(String.valueOf(kms));
+
         updateData();
 
     }

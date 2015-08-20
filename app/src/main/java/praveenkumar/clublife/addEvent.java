@@ -1,5 +1,7 @@
 package praveenkumar.clublife;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +14,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -33,6 +41,7 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener, Da
 
     private boolean dateSet=false,timeSet=false;
     private SpinnerDialogue spinnerDialogue;
+    private int PLACE_PICKER_REQUEST=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,27 +124,43 @@ public class addEvent extends ActionBarActivity implements AsyncHttpListener, Da
             return;
         }
 
-        spinnerDialogue=new SpinnerDialogue(this,"Creating Event...");
-        new Locator(this, new LocatorListener() {
-            @Override
-            public void onLocated(Location location) {
+        try {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            Context context = getApplicationContext();
+            startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                LatLng latLng=place.getLatLng();
+                spinnerDialogue=new SpinnerDialogue(this,"Creating Event...");
                 String url=baseURL+"addEvent.php";
                 HttpParam json=new HttpParam();
                 json.add("userId",userId);
                 json.add("eventName",eventName);
                 json.add("dateTime",date+" "+time);
                 json.add("ticketCount",ticketCount);
-                json.add("lat",String.valueOf(location.getLatitude()));
-                json.add("lonn",String.valueOf(location.getLongitude()));
+                json.add("lat",String.valueOf(latLng.latitude));
+                json.add("lon",String.valueOf(latLng.longitude));
 
 
                 new AsyncHttp(url,json,addEvent.this);
             }
-        });
-
-
-
-
+        }
     }
 
     void myToast(String msg){
