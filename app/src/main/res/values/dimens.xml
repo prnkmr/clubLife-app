@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="ButtonPadding">15dp</dimen>
     <dimen name="ButtonElevation">4dp</dimen>
+    <dimen name="ButtonPressed">8dp</dimen>
 </resources>
