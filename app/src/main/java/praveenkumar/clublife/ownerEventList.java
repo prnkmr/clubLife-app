@@ -38,7 +38,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_event_list);
-        pref=getSharedPreferences(AppData.SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+        pref=getSharedPreferences(AppData.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
         baseURL=getString(R.string.baseURL);
         Button newEvent=(Button)findViewById(R.id.addEvent);
         newEvent.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +48,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
             }
         });
 
-        //updateList();
+        updateList();
 
 
 
@@ -77,6 +77,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             myToast("Logging out..");
@@ -86,6 +87,8 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             return true;
+        }else if(id==R.id.update){
+            updateList();
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,7 +98,19 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     public void onResponse(String response) {
         spinnerDialogue.cancel();
         if(response==null){
-            myToast("Try Again");
+            ConfirmReload confirmReload=new ConfirmReload();
+            confirmReload.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onConfirm() {
+                    updateList();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            confirmReload.show(getSupportFragmentManager(), "Notice");
             return;
         }
 
@@ -146,6 +161,6 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     @Override
     protected void onResume() {
         super.onResume();
-        updateList();
+        //updateList();
     }
 }

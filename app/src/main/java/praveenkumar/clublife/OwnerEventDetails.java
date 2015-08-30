@@ -61,6 +61,8 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
     private String dateString;
     private String timeString;
     private Button downloadButton;
+    boolean loaded=false;
+    String oldResp;
 
     /**
      * Use this factory method to create a new instance of
@@ -91,6 +93,7 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -108,7 +111,7 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
         eventTitleText.setFocusable(false);
         ticketCountText.setFocusable(false);
         baseURL=getString(R.string.baseURL);
-        updateData();
+
         deleteButton=(Button)view.findViewById(R.id.deleteEvent);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +141,7 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
                 startActivity(browserIntent);
             }
         });
+        if(loaded) onResponse(oldResp); else updateData();
 
         return view;
     }
@@ -277,7 +281,21 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
     public void onResponse(String response) {
         spinnerDialogue.cancel();
         if(response==null){
-            myToast("Try Again");
+            ConfirmReload confirmReload=new ConfirmReload();
+            confirmReload.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onConfirm() {
+                    updateData();
+                }
+
+                @Override
+                public void onCancel() {
+                    getActivity().finish();
+                }
+
+
+            });
+            confirmReload.show(getActivity().getSupportFragmentManager(), "Notice");
             return;
         }
         try {
@@ -306,6 +324,9 @@ public class OwnerEventDetails extends Fragment implements AppData,AsyncHttpList
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        oldResp=response;
+        loaded=true;
     }
 
     private void myToast(String s) {

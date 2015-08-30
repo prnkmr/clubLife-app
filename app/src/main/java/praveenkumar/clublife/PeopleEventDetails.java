@@ -67,8 +67,6 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
             }
         });
         updateData();
-
-
     }
 
     private void updateData() {

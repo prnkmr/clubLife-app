@@ -56,8 +56,8 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
         actionBar.addTab(actionBar.newTab().setText("Details").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Registration").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("Confirmation").setTabListener(this));
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        loadAdapter();
     }
 
 
@@ -77,6 +77,8 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if(id==R.id.update){
+            loadAdapter();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -144,6 +146,10 @@ public class EventDetailsOwner extends ActionBarActivity implements ActionBar.Ta
     @Override
     protected void onResume() {
         super.onResume();
+
+    }
+
+    private void loadAdapter(){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);

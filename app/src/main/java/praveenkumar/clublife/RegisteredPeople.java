@@ -45,8 +45,9 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+    boolean loaded=false;
+    String oldResp;
 
     /**
      * Use this factory method to create a new instance of
@@ -79,6 +80,7 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
         }
         baseURL=getString(R.string.baseURL);
         userId=getActivity().getIntent().getStringExtra(USER_ID_KEY);
+
     }
 
     @Override
@@ -91,7 +93,7 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
         eventId=getActivity().getIntent().getExtras().getString(EVENT_ID_KEY);
         eventName=getActivity().getIntent().getExtras().getString(EVENT_NAME_KEY);
 
-        updateList();
+        if(loaded) onResponse(oldResp); else updateList();
         return view;
     }
 
@@ -131,6 +133,9 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        oldResp=response;
+        loaded=true;
     }
 
     private void myToast(String s) {

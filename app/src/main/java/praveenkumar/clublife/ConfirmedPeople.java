@@ -46,6 +46,8 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
     List<String> usersList,idReference,ticketIdReference;
     SpinnerDialogue spinnerDialogue;
     private OnFragmentInteractionListener mListener;
+    boolean loaded=false;
+    String oldResp;
 
     /**
      * Use this factory method to create a new instance of
@@ -78,6 +80,7 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
         }
         baseURL=getString(R.string.baseURL);
         userId=getActivity().getIntent().getStringExtra("userId");
+
     }
 
     @Override
@@ -89,7 +92,7 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
 
         eventId=getActivity().getIntent().getExtras().getString("eventId");
 
-        updateList();
+        if(loaded)onResponse(oldResp); else updateList();
         return view;
     }
 
@@ -129,6 +132,10 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        oldResp=response;
+        loaded=true;
+
     }
 
     private void myToast(String s) {

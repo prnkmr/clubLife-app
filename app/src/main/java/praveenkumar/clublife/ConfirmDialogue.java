@@ -18,7 +18,6 @@ public class ConfirmDialogue extends DialogFragment implements AppData {
 
     String eventId;
     Activity from;
-
     void setId(String id,Activity from){
         eventId=id;
         this.from=from;

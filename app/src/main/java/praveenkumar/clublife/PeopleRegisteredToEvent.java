@@ -41,7 +41,7 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
         eventId=getIntent().getExtras().getString("eventId");
         eventName=getIntent().getExtras().getString("eventName");
         titleText.setText(eventName);
-
+        updateList();
     }
 
     void updateList(){
@@ -119,6 +119,6 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
     @Override
     protected void onResume() {
         super.onResume();
-        updateList();
+
     }
 }
