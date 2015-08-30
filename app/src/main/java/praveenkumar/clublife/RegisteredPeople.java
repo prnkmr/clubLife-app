@@ -108,7 +108,19 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
     public void onResponse(String response) {
         spinnerDialogue.cancel();
         if(response==null){
-            myToast("Try Again");
+            ConfirmReload confirmReload=new ConfirmReload();
+            confirmReload.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onConfirm() {
+                    updateList();
+                }
+
+                @Override
+                public void onCancel() {
+                    getActivity().finish();
+                }
+            });
+            confirmReload.show(getActivity().getSupportFragmentManager(), "Notice");
             return;
         }
         try {

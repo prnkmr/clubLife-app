@@ -141,7 +141,19 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
     public void onResponse(String response) {
         spinnerDialogue.cancel();
         if(response==null){
-            myToast("Try Again");
+            ConfirmReload confirmReload=new ConfirmReload();
+            confirmReload.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onConfirm() {
+                    updateList();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            confirmReload.show(getSupportFragmentManager(), "Notice");
             return;
         }
 

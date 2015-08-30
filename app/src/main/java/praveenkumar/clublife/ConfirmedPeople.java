@@ -145,7 +145,7 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("Clicked", position + "");
-        Intent userDetailsIntent=new Intent(getActivity(),PeopleDetails.class);
+        Intent userDetailsIntent=new Intent(getActivity(),ConfirmedPeopleDetails.class);
         userDetailsIntent.putExtra("userId",idReference.get(position));
         userDetailsIntent.putExtra("ticketId",ticketIdReference.get(position));
         startActivity(userDetailsIntent);

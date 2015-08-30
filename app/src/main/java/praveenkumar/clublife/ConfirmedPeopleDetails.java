@@ -3,8 +3,8 @@ package praveenkumar.clublife;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class PeopleDetails extends ActionBarActivity implements AppData,AsyncHttpListener {
+public class ConfirmedPeopleDetails extends ActionBarActivity implements AppData,AsyncHttpListener {
     TextView peopleNameText,FBLinkText;
     String baseURL,userId;
     SpinnerDialogue spinnerDialogue;
@@ -29,7 +28,7 @@ public class PeopleDetails extends ActionBarActivity implements AppData,AsyncHtt
         super.onCreate(savedInstanceState);
         baseURL=getString(R.string.baseURL);
         userId=getIntent().getStringExtra(USER_ID_KEY);
-        setContentView(R.layout.activity_people_details);
+        setContentView(R.layout.activity_confirmed_people_details);
         peopleNameText=(TextView)findViewById(R.id.userName);
         FBLinkText=(TextView)findViewById(R.id.FBLink);
         peopleNameText.setText(getIntent().getStringExtra(USERNAME_KEY));
@@ -112,32 +111,6 @@ public class PeopleDetails extends ActionBarActivity implements AppData,AsyncHtt
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
 
-    public void confirmTicket(View view){
-        String url=baseURL+"confirmTicket.php";
-        ArrayList param=new ArrayList();
-        param.add(new BasicNameValuePair(TICKET_ID_KEY,getIntent().getStringExtra(TICKET_ID_KEY)));
-        param.add(new BasicNameValuePair(EVENT_NAME_KEY,getIntent().getStringExtra(EVENT_NAME_KEY)));
-        new AsyncHttp(url, param, new AsyncHttpListener() {
-            @Override
-            public void onResponse(String response) {
-                spinnerDialogue.cancel();
-                if(response==null){
-                    myToast("Try Again");
-                    return;
-                }
-                try {
-                    JSONObject resp=new JSONObject(response);
-                    if(resp.getInt("errorCode")==0){
-                        myToast("Ticket Confirmed");
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        spinnerDialogue=new SpinnerDialogue(this,"Please wait...");
-    }
 
     public void cancelTicket(View view){
         String url=baseURL+"cancelTicket.php";

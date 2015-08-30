@@ -2,6 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="praveenkumar.clublife.EventListPeople">
+    <item android:id="@+id/update"
+        android:icon="@drawable/refresh"
+        android:title="Update"
+        app:showAsAction="ifRoom|collapseActionView" />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

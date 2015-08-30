@@ -103,6 +103,9 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
         if (id == R.id.action_settings) {
 
             return true;
+        }else if(id==R.id.update){
+            updateData();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -112,7 +115,19 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
     public void onResponse(String response) {
         spinnerDialogue.cancel();
             if(response==null){
-                myToast("Try Again");
+                ConfirmReload confirmReload=new ConfirmReload();
+                confirmReload.setConfirmationListener(new ConfirmationListener() {
+                    @Override
+                    public void onConfirm() {
+                        updateData();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        finish();
+                    }
+                });
+                confirmReload.show(getSupportFragmentManager(), "Notice");
                 return;
             }
         try {
