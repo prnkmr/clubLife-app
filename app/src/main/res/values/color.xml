@@ -3,12 +3,15 @@
     <color name="loginBg">#212121</color>
     <color name="loginText">#f5f5f5</color>
     <color name="textviewText">#212121</color>
-    <color name="textviewBg">#66424242</color>
+    <color name="logintextviewBg">#66424242</color>
+    <color name="textviewBg">#e0e0e0</color>
     <color name="loginPageText">#fafafa</color>
-    <color name="ActionBarColor">#f9a825</color>
+    <color name="ActionBarColor">#ff9800</color>
     <color name="light_grey">#cccccc</color>
     <color name="blueshade">#40c4ff</color>
     <color name="pinkshade">#ff80ab</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="buttonColors">#ffb74d</color>
+    <color name="defaultbgbtn">#ffe0b2</color>
 </resources>

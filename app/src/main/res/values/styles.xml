@@ -4,39 +4,50 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="actionBarStyle">@style/CustomActionBar</item>
         <item name="android:actionBarStyle">@style/CustomActionBar</item>
-        <item name="android:buttonStyle">@style/loginbutton</item>
+        <item name="android:buttonStyle">@style/button</item>
+        <item name="android:editTextStyle">@style/text</item>
     </style>
 
-    <style name="text">
+    <style name="text"  parent="@android:style/Widget.EditText">
         <item name="android:textColor">@color/textviewText</item>
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:background">@color/textviewBg</item>
     </style>
 
-    <style name="loginbutton" >
+    <style name="logintext"  parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/textviewText</item>
+        <item name="android:padding">@dimen/ButtonPadding</item>
+        <item name="android:background">@color/logintextviewBg</item>
+    </style>
 
-        <!--<item name="android:background">@color/loginBg</item>
-        <item name="android:textColor">@color/loginText</item>
-
-        <item name="android:elevation">@dimen/ButtonElevation</item>
-
-        <item name="android:state_pressed">@dimen/ButtonPressed</item>-->
+    <style name="button" parent="android:style/Widget.Button">
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:background">@drawable/buttonstyle</item>
     </style>
-    <style name="LoginPage" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="android:textColor">@color/loginPageText</item>
-    </style>
-    <style name="FbBtn">
+
+    <style name="loginbutton">
+        <item name="android:background">@color/loginBg</item>
+        <item name="android:textColor">@color/loginText</item>
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:elevation">@dimen/ButtonElevation</item>
     </style>
+    <style name="LoginPage" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:textColor">@color/loginPageText</item>
+    </style>
+
+    <style name="FbBtn">
+        <item name="android:padding">@dimen/ButtonPadding</item>
+    </style>
+
     <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
         <item name="background">@color/ActionBarColor</item>
         <item name="android:background">@color/ActionBarColor</item>
     </style>
+
     <style name="List_Styling" parent="@android:style/Widget.ListView">
         <item name="android:listSelector">@drawable/listselector</item>
     </style>
+
+
 </resources>

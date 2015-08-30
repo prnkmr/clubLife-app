@@ -28,7 +28,6 @@
         android:layout_below="@+id/addEvent"
         android:layout_centerHorizontal="true"
         android:padding="@dimen/ButtonPadding"
-        android:background="@color/light_grey"
         style="@style/List_Styling"
         />
 
