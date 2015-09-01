@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +38,7 @@ import java.util.List;
 
 
 
-public class MainActivity extends Activity implements AsyncHttpListener,AppData{
+public class MainActivity extends AppCompatActivity implements AsyncHttpListener,AppData{
 
     CallbackManager callbackManager;
     FacebookSdk facebook;
@@ -45,6 +46,7 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SpinnerDialogue spinnerDialogue;
+    JSONObject FBjson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -101,7 +103,8 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        validateLogin(object);
+                                        FBjson=object;
+                                        validateLogin();
 
                                     }
                                 });
@@ -116,10 +119,13 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                     @Override
                     public void onCancel() {
                         // App code
+                        myToast("cancelled");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
+                        myToast("Login Error");
+                        myToast(exception.toString());
                         Log.d("MainActivity", "Login Error");
                     }
                 });
@@ -215,17 +221,11 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
                 id = json.getInt("userId");
                 editor.putString(USER_ID_KEY, id+"");
                 editor.commit();
-                if("people".equals(json.getString(USER_TYPE_KEY))) {
-                    onLoginPeople();
-                    editor.putBoolean(LOGGED_IN_KEY,true);
-                    editor.commit();
-                    //startActivity(new Intent(getApplicationContext(),));
-                }else{
                     editor.putString(USER_TYPE_KEY,USER_TYPE_OWNER);
                     editor.putBoolean(LOGGED_IN_KEY,true);
                     editor.commit();
                     onLoginOwner();
-                }
+
             }else if(json.getInt("errorCode")==5) {
                 myToast("Wrong Username/Password");
             }else{
@@ -250,7 +250,7 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
         startService(intent);
     }
 
-    void validateLogin(JSONObject FBjson){
+    void validateLogin(){
         String url=baseURL+"checkFBLogin.php";
         myLog(url);
         List<NameValuePair> json=new ArrayList<NameValuePair>();
@@ -261,7 +261,45 @@ public class MainActivity extends Activity implements AsyncHttpListener,AppData{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        new AsyncHttp(url,json,this);
+        new AsyncHttp(url, json, new AsyncHttpListener() {
+            @Override
+            public void onResponse(String response) {
+                if(spinnerDialogue!=null) {
+                    spinnerDialogue.cancel();
+                    spinnerDialogue = null;
+                }
+                if(response==null){
+                    ConfirmReload confirmReload=new ConfirmReload();
+                    confirmReload.setConfirmationListener(new ConfirmationListener() {
+                        @Override
+                        public void onConfirm() {
+                            validateLogin();
+                        }
+
+                        @Override
+                        public void onCancel() {
+
+                        }
+                    });
+                    confirmReload.show(getSupportFragmentManager(), "Notice");
+                    return;
+                }
+                try {
+                    JSONObject json = new JSONObject(response);
+                    if (json.getInt("errorCode") == 0) {
+                        int id;
+                        id = json.getInt("userId");
+                        editor.putString(USER_ID_KEY, id + "");
+                        editor.commit();
+                        onLoginPeople();
+                        editor.putBoolean(LOGGED_IN_KEY, true);
+                        editor.commit();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         spinnerDialogue=new SpinnerDialogue(this,"Logging In...");
     }
     void validateOwnerLogin(){

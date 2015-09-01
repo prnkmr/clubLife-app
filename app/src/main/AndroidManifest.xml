@@ -7,16 +7,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <permission
         android:name="praveenkumar.clublife.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="praveenkumar.clublife.permission.C2D_MESSAGE" />
+
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,8 +32,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/LoginPage"
-            >
+            android:theme="@style/LoginPage" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +44,6 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".ownerEventList"
             android:label="@string/title_activity_owner_event_list" >
@@ -104,10 +105,14 @@
             android:exported="false" >
         </service>
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCBtpBum1IrpAytUpKZtjEfWQti9j0lj6E"/>
+            android:value="AIzaSyCBtpBum1IrpAytUpKZtjEfWQti9j0lj6E" />
+
+        <activity
+            android:name=".MyTickets"
+            android:label="@string/title_activity_my_tickets" >
+        </activity>
     </application>
 
 </manifest>

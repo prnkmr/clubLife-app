@@ -132,8 +132,12 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             return true;
+        }else if(id==R.id.update){
+            updateList();
+            return true;
+        }else if(id==R.id.tickets){
+            startActivity(new Intent(getApplicationContext(),MyTickets.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
