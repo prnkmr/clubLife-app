@@ -38,8 +38,8 @@
         android:layout_alignBottom="@+id/textView3"
         android:layout_alignRight="@+id/eventTitle"
         android:layout_alignEnd="@+id/eventTitle"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:layout_toEndOf="@+id/distance"
+        android:layout_toRightOf="@+id/distance" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,8 +61,8 @@
         android:layout_alignBottom="@+id/textView1"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:layout_toEndOf="@+id/distance"
+        android:layout_toRightOf="@+id/distance" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,9 +81,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/date"
         android:layout_alignTop="@+id/textView4"
-        android:layout_toRightOf="@+id/textView4"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/distance"
+        android:layout_toEndOf="@+id/distance" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -102,20 +103,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/time"
         android:layout_alignBottom="@+id/textView5"
-        android:layout_toRightOf="@+id/textView5"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/distance"
+        android:layout_toEndOf="@+id/distance" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/register"
-        android:onClick="registerEvent"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="24dp" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -134,9 +127,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/ticketCount"
         android:layout_alignBottom="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/distance"
+        android:layout_toEndOf="@+id/distance" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -158,12 +152,32 @@
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Direction"
-        android:id="@+id/direct"
-        android:layout_alignBottom="@+id/register"
-        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="44dp">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Register"
+            android:id="@+id/register"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="registerEvent"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Get Direction"
+            android:id="@+id/direct"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

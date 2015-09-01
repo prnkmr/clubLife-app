@@ -23,7 +23,7 @@
     <style name="button" parent="android:style/Widget.Button">
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/ButtonPadding</item>
-        <item name="android:background">@drawable/buttonstyle</item>
+        <item name="android:background">@color/defaultbgbtn</item>
     </style>
 
     <style name="loginbutton">
