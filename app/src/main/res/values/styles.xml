@@ -23,7 +23,12 @@
     <style name="button" parent="android:style/Widget.Button">
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/ButtonPadding</item>
-        <item name="android:background">@color/defaultbgbtn</item>
+        <item name="android:background">@drawable/button</item>
+    </style>
+
+    <style name="Theme.AppCompat.Light.NoActionBar" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item> <!-- For 2.x version  -->
     </style>
 
     <style name="loginbutton">
@@ -32,7 +37,7 @@
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:elevation">@dimen/ButtonElevation</item>
     </style>
-    <style name="LoginPage" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+    <style name="LoginPage" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">@color/loginPageText</item>
     </style>
 
@@ -44,10 +49,12 @@
         <item name="background">@color/ActionBarColor</item>
         <item name="android:background">@color/ActionBarColor</item>
     </style>
-
+<!--
     <style name="List_Styling" parent="@android:style/Widget.ListView">
         <item name="android:listSelector">@drawable/listselector</item>
     </style>
-
-
+-->
+    <style name="listElement" parent="android:Widget.TextView">
+        <item name="android:background">@drawable/listselector</item>
+    </style>
 </resources>

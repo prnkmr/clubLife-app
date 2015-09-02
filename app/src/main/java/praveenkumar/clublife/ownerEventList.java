@@ -6,13 +6,16 @@ import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -126,7 +129,7 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
                 idReference.add(event.getString(0));
                 list.add(event.getString(1));
             }
-                final ArrayAdapter adapter = new ArrayAdapter(this,
+                final ArrayAdapter adapter = new CustomAdapter(this,
                         android.R.layout.simple_list_item_1, list);
                 listview.setAdapter(adapter);
                 listview.setOnItemClickListener(this);
@@ -162,5 +165,22 @@ public class ownerEventList extends ActionBarActivity implements AsyncHttpListen
     protected void onResume() {
         super.onResume();
         //updateList();
+    }
+
+    class CustomAdapter extends ArrayAdapter<String>{
+        public CustomAdapter(Context context, int resource, List objects) {
+            super(context, resource, objects);
+
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            String text=getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.listelement, parent, false);
+            }
+            ((TextView)convertView.findViewById(R.id.str)).setText(text);
+            return convertView;
+        }
     }
 }
