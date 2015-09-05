@@ -37,7 +37,7 @@
         <item name="android:padding">@dimen/ButtonPadding</item>
         <item name="android:elevation">@dimen/ButtonElevation</item>
     </style>
-    <style name="LoginPage" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="LoginPage" parent="@style/Theme.AppCompat.Light">
         <item name="android:textColor">@color/loginPageText</item>
     </style>
 
