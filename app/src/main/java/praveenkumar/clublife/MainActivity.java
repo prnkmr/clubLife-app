@@ -76,15 +76,11 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
             }
         });
         callbackManager = CallbackManager.Factory.create();
-
-
-
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         myLog("Login success");
-
                         final AccessToken accessToken = loginResult.getAccessToken();
                         Log.d("UserId", accessToken.getUserId());
                         GraphRequest request = GraphRequest.newMeRequest(
@@ -100,21 +96,17 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                                             editor.putString(USER_ID_KEY, accessToken.getUserId());
                                             editor.putString(USER_TYPE_KEY,USER_TYPE_PEOPLE);
                                             editor.commit();
-
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
                                         FBjson=object;
                                         validateLogin();
-
                                     }
                                 });
                         Bundle parameters = new Bundle();
                         parameters.putString("fields", "id,name,link,birthday,gender,location,verified");
                         request.setParameters(parameters);
                         request.executeAsync();
-
-
                     }
 
                     @Override

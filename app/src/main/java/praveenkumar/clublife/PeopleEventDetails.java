@@ -53,7 +53,7 @@ public class PeopleEventDetails extends ActionBarActivity implements AppData, As
         ticketCountText=(TextView)findViewById(R.id.ticketCount);
         distanceText=(TextView)findViewById(R.id.distance);
         double kms=getIntent().getDoubleExtra("distance",0.0);
-        distanceText.setText(String.valueOf(kms));
+        distanceText.setText(String.format("  %.2f KMs",kms));
         ((Button)findViewById(R.id.direct)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
