@@ -6,6 +6,23 @@
         <item name="android:actionBarStyle">@style/CustomActionBar</item>
         <item name="android:buttonStyle">@style/button</item>
         <item name="android:editTextStyle">@style/text</item>
+        <item name="android:textViewStyle">@style/textView</item>
+    </style>
+
+    <style name="ownerTheme">
+        <item name="android:background">@drawable/owner</item>
+    </style>
+
+    <style name="textView" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="textViewDark" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="userTheme">
+        <item name="android:background">@drawable/user</item>
     </style>
 
     <style name="text"  parent="@android:style/Widget.EditText">
@@ -48,6 +65,14 @@
     <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
         <item name="background">@color/ActionBarColor</item>
         <item name="android:background">@color/ActionBarColor</item>
+    </style>
+
+    <style name="ticketCount">
+        <item name="android:padding">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 <!--
     <style name="List_Styling" parent="@android:style/Widget.ListView">

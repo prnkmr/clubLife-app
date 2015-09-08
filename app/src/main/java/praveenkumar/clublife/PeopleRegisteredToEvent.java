@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,6 +19,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +94,13 @@ public class PeopleRegisteredToEvent extends ActionBarActivity implements AsyncH
                     idReference.add(userJson.getString(1));
                     ticketIdReference.add(userJson.getString(2));
                 }
-                ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,usersList);
+                ArrayAdapter adapter=new ArrayAdapter(this,R.layout.default_list_element_dark,usersList){
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        ((TextView)convertView.findViewById(R.id.eventName)).setText(usersList.get(position));
+                        return convertView;
+                    }
+                };
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(this);
             }else{

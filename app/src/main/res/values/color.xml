@@ -12,6 +12,9 @@
     <color name="pinkshade">#ff80ab</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="transWhite">#80ffffff</color>
     <color name="buttonColors">#ffb74d</color>
     <color name="defaultbgbtn">#ffe0b2</color>
+    <color name="transparent">#07000000</color>
+    <color name="listShade">#bdbdbd</color>
 </resources>
