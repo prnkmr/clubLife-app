@@ -3,6 +3,7 @@ package praveenkumar.clublife;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -168,7 +169,9 @@ public class MyTickets extends ActionBarActivity implements AppData,AsyncHttpLis
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.myticket_list_element, parent, false);
             }
             ((TextView)convertView.findViewById(R.id.eventName)).setText(ticket.eventName);
+            ((TextView)convertView.findViewById(R.id.eventName)).setTextColor(Color.WHITE);
             ((TextView)convertView.findViewById(R.id.ticketId)).setText(ticket.id);
+            ((TextView)convertView.findViewById(R.id.ticketId)).setTextColor(Color.WHITE);
             return convertView;
         }
     }

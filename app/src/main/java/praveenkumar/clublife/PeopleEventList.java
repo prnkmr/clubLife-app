@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -173,8 +175,15 @@ public class PeopleEventList extends ActionBarActivity implements AppData,AsyncH
                     eventList.add((String)event.get(0),(String)event.get(1),ddist);
 
                 }
-                defaultAdapter = new ArrayAdapter(this,
-                        android.R.layout.simple_list_item_1, eventList.getListString());
+                defaultAdapter = new ArrayAdapter(this,R.layout.default_list_element_dark, eventList.getListString()){
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        if(convertView==null)
+                            convertView=getLayoutInflater().inflate(R.layout.default_list_element_dark,parent,false);
+                        ((TextView)convertView.findViewById(R.id.eventName)).setText(eventList.getListString().get(position));
+                        return convertView;
+                    }
+                };
                 listview.setAdapter(defaultAdapter);
                 listview.setOnItemClickListener(this);
 

@@ -120,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements AsyncHttpListener
                         myToast("Login Error");
                         myToast(exception.toString());
                         Log.d("MainActivity", "Login Error");
+                        Log.d("MainActivity",exception.toString());
                     }
                 });
 
