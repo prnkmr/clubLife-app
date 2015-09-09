@@ -2,6 +2,7 @@ package praveenkumar.clublife;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -136,7 +137,17 @@ public class RegisteredPeople extends Fragment implements AppData,AsyncHttpListe
                     idReference.add(userJson.getString(1));
                     ticketIdReference.add(userJson.getString(2));
                 }
-                ArrayAdapter adapter=new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,usersList);
+                ArrayAdapter adapter=new ArrayAdapter(getActivity(),R.layout.default_list_element_dark,usersList){
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        convertView=getActivity().getLayoutInflater().inflate(R.layout.default_list_element_dark,parent,false);
+
+                        ((TextView) convertView.findViewById(R.id.eventName)).setText(usersList.get(position));
+                        ((TextView) convertView.findViewById(R.id.eventName)).setTextColor(Color.WHITE);
+
+                        return convertView;
+                    }
+                };
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(this);
             }else{

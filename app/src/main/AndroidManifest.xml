@@ -49,6 +49,10 @@
             android:label="@string/title_activity_owner_event_list" >
         </activity>
         <activity
+            android:name=".ConfirmedPeopleDetails"
+            android:label="@string/title_activity_people_details" >
+        </activity>
+        <activity
             android:name=".addEvent"
             android:label="@string/title_activity_add_event" >
         </activity>

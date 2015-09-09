@@ -1,7 +1,9 @@
 package praveenkumar.clublife;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -123,7 +126,17 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
                     idReference.add(userJson.getString(1));
                     ticketIdReference.add(userJson.getString(2));
                 }
-                ArrayAdapter adapter=new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,usersList);
+                ArrayAdapter adapter=new ArrayAdapter(getActivity(),R.layout.default_list_element_dark,usersList){
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        if(convertView==null) convertView=getActivity().getLayoutInflater().inflate(R.layout.default_list_element_dark,parent,false);
+
+                            ((TextView) convertView.findViewById(R.id.eventName)).setText(usersList.get(position));
+                            ((TextView) convertView.findViewById(R.id.eventName)).setTextColor(Color.WHITE);
+
+                        return convertView;
+                    }
+                };
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(this);
             }else{
@@ -191,5 +204,7 @@ public class ConfirmedPeople extends Fragment implements AsyncHttpListener,  Ada
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
 
 }
