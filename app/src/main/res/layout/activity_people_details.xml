@@ -17,6 +17,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:textColor="@color/white"
         android:textAlignment="center" />
 
     <TextView
@@ -27,6 +28,7 @@
         android:id="@+id/textView3"
         android:layout_marginTop="33dp"
         android:layout_below="@+id/userName"
+        android:textColor="@color/white"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -39,6 +41,7 @@
         android:layout_alignRight="@+id/eventTitle"
         android:layout_alignEnd="@+id/eventTitle"
         android:layout_toRightOf="@+id/textView3"
+        android:textColor="@color/white"
         android:layout_toEndOf="@+id/textView3" />
 
     <Button
