@@ -92,7 +92,7 @@ public class PeopleDetails extends ActionBarActivity implements AppData,AsyncHtt
                 peopleNameText.setText(respJson.getString("userName"));
                 final String FBLink=respJson.getString("FBLink");
                 FBLinkText.setText(FBLink);
-                FBLinkText.setTextColor(Color.BLUE);
+                //FBLinkText.setTextColor(Color.BLUE);
                 FBLinkText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
